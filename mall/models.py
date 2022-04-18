@@ -9,7 +9,7 @@ from django.core.validators import RegexValidator
 
 
 class Customer(models.Model):
-    mobile_no = models.IntegerField(primary_key=True)
+    mobile_id = models.IntegerField(primary_key=True)
     firstname = models.CharField(max_length=30)
     lastname = models.CharField(max_length=30)
     Vaccination_Status = models.BooleanField(default=False)
@@ -28,13 +28,33 @@ class Companies(models.Model):
 class Company_contact_no(models.Model):
     Contact_no = models.CharField(validators=[RegexValidator(
         regex='^(\+91[\-\s]?)?[0]?(91)?[789]\d{9}$', message='should be a valid phone number', code='no match')], max_length=12)
-    Company_id = models.CharField(max_length=50, primary_key=True)
+
+    Company = models.ForeignKey(Companies,on_delete=models.CASCADE,primary_key=True,default='def')
+
 
     class Meta:
         unique_together = (("Contact_no", "Company_id"),)
 
-    Company_id = models.ForeignKey(
-        Companies, on_delete=models.CASCADE, primary_key=True)
+
+class Contracts(models.Model):
+    Type_choices = [
+        ('S','Selling'),
+        ('R','Renting')
+    ]
+    Contract_id = models.CharField(max_length=40, primary_key=True)
+    Type = models.CharField(max_length=1, choices=Type_choices)
+    Price = models.FloatField()
+    Start_Date = models.DateTimeField(auto_now_add=True)
+    End_Date = models.DateTimeField(auto_now_add=True)
+    # Signing_Date = date = models.DateField(
+    #     _Feature("Date"), default=date.today)
+    Signing_Date = models.DateField(auto_now_add=True)
+    Billing_Frequency = models.IntegerField()
+    Company = models.ForeignKey(Companies,on_delete=models.CASCADE, default='def')
+
+    class Meta:
+        verbose_name_plural = "cid"
+
 
 
 class Invoice(models.Model):
@@ -44,9 +64,12 @@ class Invoice(models.Model):
     GST = models.FloatField()
     Date_issued = models.DateTimeField(auto_now_add=True)
     Date_paid = models.DateTimeField(auto_now=True)
-    Contract_id = models.CharField(max_length=40)
-    issued_by_id = models.CharField(max_length=40)
-    issued_to_id = models.CharField(max_length=40)
+
+    Contract = models.ForeignKey(Contracts,on_delete=models.CASCADE,default='def')
+    issued_by = models.ForeignKey(Companies,on_delete=models.CASCADE, related_name='company_issuing',default='def')
+    issued_to = models.ForeignKey(Companies,on_delete=models.CASCADE, related_name='company_issued',default='def')
+
+    
 
 
 class Contracts(models.Model):
@@ -60,9 +83,10 @@ class Contracts(models.Model):
     Start_Date = models.DateTimeField(auto_now_add=True)
     End_Date = models.DateTimeField(auto_now_add=True)
 
+
     Signing_Date = models.DateField(auto_now_add=True)
     Billing_Frequency = models.IntegerField()
-    Company_id = models.CharField(max_length=40)
+   
 
     class Meta:
         verbose_name_plural = "cid"
@@ -75,14 +99,15 @@ class Shops(models.Model):
     Status_choices = [
         ('S','Sold'),
         ('R','Rented'),
-        ('E','Empty'),
+
+        ('E','Empty')
     ]
     Shop_id = models.CharField(max_length=40, primary_key=True)
-    Status = models.CharField(max_length=1, choices= Status_choices, default='E')
+    Status = models.CharField(max_length=1,choices=Status_choices,default='E')
 
 
 class Slots(models.Model):
-    Slot_no = models.IntegerField(primary_key=True)
+    Slot_id = models.IntegerField(primary_key=True)
     Slot_status = models.BooleanField(default=False)
     Rate = models.FloatField()
 
@@ -94,10 +119,13 @@ class Booking(models.Model):
     Booking_id = models.CharField(max_length=40, primary_key=True)
     in_time = models.DateTimeField(auto_now_add=True)
     out_time = models.DateTimeField(auto_now_add=True)
-    mobile_no = models.CharField(validators=[RegexValidator(
-        regex='^(\+91[\-\s]?)?[0]?(91)?[789]\d{9}$', message='should be a valid phone number', code='no match')], max_length=12)
-    Invoice_id = models.CharField(max_length=50)
-    Slot_no = models.IntegerField()
+
+    mobile = models.ForeignKey(Customer, on_delete=models.CASCADE,validators=[RegexValidator(
+        regex='^(\+91[\-\s]?)?[0]?(91)?[789]\d{9}$', message='should be a valid phone number', code='no match')])
+    Invoice = models.ForeignKey(Invoice,on_delete=models.CASCADE,default=0)
+    Slot = models.ForeignKey(Slots,on_delete=models.CASCADE,default='def' )
+
+
 
     mobile_no = models.ForeignKey(Customer, on_delete=models.CASCADE, validators=[RegexValidator(
         regex='^(\+91[\-\s]?)?[0]?(91)?[789]\d{9}$', message='should be a valid phone number', code='no match')])
@@ -111,8 +139,10 @@ class Services(models.Model):
 
 
 class Provides(models.Model):
-    Contract_id = models.CharField(max_length=40, primary_key=True)
-    Service_id = models.CharField(max_length=40)
+
+    Contract = models.ForeignKey(Contracts,on_delete=models.CASCADE, primary_key=True,default='def')
+    Service = models.ForeignKey(Services,on_delete=models.CASCADE,default='def')
+
 
     class Meta:
         unique_together = (("Contract_id", "Service_id"),)
@@ -123,8 +153,9 @@ class Provides(models.Model):
 
 
 class Bound_by(models.Model):
-    Contract_id = models.CharField(max_length=40, primary_key=True)
-    Shop_id = models.CharField(max_length=40)
+
+    Contract = models.ForeignKey(Contracts,on_delete=models.CASCADE, primary_key=True,default='def')
+    Shop = models.ForeignKey(Shops,on_delete=models.CASCADE,default='def')
 
     class Meta:
         unique_together = (("Contract_id", "Shop_id"),)
