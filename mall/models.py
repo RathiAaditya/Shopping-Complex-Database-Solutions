@@ -50,8 +50,12 @@ class Invoice(models.Model):
 
 
 class Contracts(models.Model):
+    Type_choices = [
+        ('S','Selling'),
+        ('R','Renting'),
+    ]
     Contract_id = models.CharField(max_length=40, primary_key=True)
-    Type = models.CharField(max_length=10)
+    Type = models.CharField(max_length =1, choices= Type_choices)
     Price = models.FloatField()
     Start_Date = models.DateTimeField(auto_now_add=True)
     End_Date = models.DateTimeField(auto_now_add=True)
@@ -68,8 +72,13 @@ class Contracts(models.Model):
 
 
 class Shops(models.Model):
+    Status_choices = [
+        ('S','Sold'),
+        ('R','Rented'),
+        ('E','Empty'),
+    ]
     Shop_id = models.CharField(max_length=40, primary_key=True)
-    Status = models.BooleanField(default=False)
+    Status = models.CharField(max_length=1, choices= Status_choices, default='E')
 
 
 class Slots(models.Model):
