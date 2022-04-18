@@ -41,3 +41,4 @@ def login(request):
 
     custs = [cust1, cust2, cust3]
     return render(request, 'login.html', {'customers': custs})
+
