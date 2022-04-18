@@ -72,6 +72,15 @@ class Shops(models.Model):
     Status = models.BooleanField(default=False)
 
 
+class Slots(models.Model):
+    Slot_no = models.IntegerField(primary_key=True)
+    Slot_status = models.BooleanField(default=False)
+    Rate = models.FloatField()
+
+    class Meta:
+        verbose_name = "slots"
+
+
 class Booking(models.Model):
     Booking_id = models.CharField(max_length=40, primary_key=True)
     in_time = models.DateTimeField(auto_now_add=True)
@@ -84,16 +93,12 @@ class Booking(models.Model):
     mobile_no = models.ForeignKey(Customer, on_delete=models.CASCADE, validators=[RegexValidator(
         regex='^(\+91[\-\s]?)?[0]?(91)?[789]\d{9}$', message='should be a valid phone number', code='no match')])
     Invoice_id = models.ForeignKey(Invoice, on_delete=models.CASCADE)
-    # Slot_no = models.ForeignKey(Slots, on_delete=models.CASCADE)
+    Slot_no = models.ForeignKey(Slots, on_delete=models.CASCADE)
 
 
-class Slots(models.Model):
-    Slot_no = models.IntegerField(primary_key=True)
-    Slot_status = models.BooleanField(default=False)
-    Rate = models.FloatField()
-
-    class Meta:
-        verbose_name = "slots"
+class Services(models.Model):
+    Service_id = models.CharField(primary_key=True, max_length=40)
+    Type = models.CharField(max_length=10)
 
 
 class Provides(models.Model):
@@ -105,12 +110,7 @@ class Provides(models.Model):
 
     Contract_id = models.ForeignKey(
         Contracts, on_delete=models.CASCADE, primary_key=True)
-    # Service_id = models.ForeignKey(Services, on_delete=models.CASCADE)
-
-
-class Services(models.Model):
-    Service_id = models.CharField(primary_key=True, max_length=40)
-    Type = models.CharField(max_length=10)
+    Service_id = models.ForeignKey(Services, on_delete=models.CASCADE)
 
 
 class Bound_by(models.Model):
