@@ -9,7 +9,7 @@ from django.core.validators import RegexValidator
 
 
 class Customer(models.Model):
-    mobile_id = models.IntegerField(primary_key=True)
+    mobile_id = models.BigIntegerField(primary_key=True)
     firstname = models.CharField(max_length=30)
     lastname = models.CharField(max_length=30)
     Vaccination_Status = models.BooleanField(default=False)

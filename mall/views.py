@@ -1,7 +1,7 @@
 from django.http import HttpResponse
 from django.shortcuts import render
 
-from mall.models import Customer
+from mall.models import Companies, Customer
 
 # Create your views here.
 
@@ -42,3 +42,14 @@ def login(request):
     custs = [cust1, cust2, cust3]
     return render(request, 'login.html', {'customers': custs})
 
+def customerdata(request):
+    customers = Customer.objects.all()
+    all_fields =[field.name for field in Customer._meta.get_fields()]
+    del all_fields[0]
+    return render(request, 'customerdata.html',{'customer': customers,'column': all_fields})
+
+def companydata(request):
+    companies = Companies.objects.all()
+    all_fields =[field.name for field in Companies._meta.get_fields()]
+    del all_fields[0:4]
+    return render(request, 'companydata.html',{'company': companies,'column': all_fields})
