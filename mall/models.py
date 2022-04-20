@@ -28,10 +28,13 @@ class Companies(models.Model):
 class Company_contact_no(models.Model):
     Contact_no = models.CharField(validators=[RegexValidator(
         regex='^(\+91[\-\s]?)?[0]?(91)?[789]\d{9}$', message='should be a valid phone number', code='no match')], max_length=12)
+
     Company = models.ForeignKey(Companies,on_delete=models.CASCADE,primary_key=True,default='def')
+
 
     class Meta:
         unique_together = (("Contact_no", "Company_id"),)
+
 
 class Contracts(models.Model):
     Type_choices = [
@@ -53,6 +56,7 @@ class Contracts(models.Model):
         verbose_name_plural = "cid"
 
 
+
 class Invoice(models.Model):
     Invoice_id = models.CharField(max_length=50, primary_key=True)
     Amount = models.FloatField()
@@ -60,32 +64,62 @@ class Invoice(models.Model):
     GST = models.FloatField()
     Date_issued = models.DateTimeField(auto_now_add=True)
     Date_paid = models.DateTimeField(auto_now=True)
+
     Contract = models.ForeignKey(Contracts,on_delete=models.CASCADE,default='def')
     issued_by = models.ForeignKey(Companies,on_delete=models.CASCADE, related_name='company_issuing',default='def')
     issued_to = models.ForeignKey(Companies,on_delete=models.CASCADE, related_name='company_issued',default='def')
 
+    
 
+
+class Contracts(models.Model):
+    Type_choices = [
+        ('S','Selling'),
+        ('R','Renting'),
+    ]
+    Contract_id = models.CharField(max_length=40, primary_key=True)
+    Type = models.CharField(max_length =1, choices= Type_choices)
+    Price = models.FloatField()
+    Start_Date = models.DateTimeField(auto_now_add=True)
+    End_Date = models.DateTimeField(auto_now_add=True)
+
+
+    Signing_Date = models.DateField(auto_now_add=True)
+    Billing_Frequency = models.IntegerField()
+   
+
+    class Meta:
+        verbose_name_plural = "cid"
+
+    Company_id = models.ForeignKey(
+        Companies, default=None, on_delete=models.CASCADE)
 
 
 class Shops(models.Model):
     Status_choices = [
         ('S','Sold'),
         ('R','Rented'),
+
         ('E','Empty')
     ]
     Shop_id = models.CharField(max_length=40, primary_key=True)
     Status = models.CharField(max_length=1,choices=Status_choices,default='E')
+
 
 class Slots(models.Model):
     Slot_id = models.IntegerField(primary_key=True)
     Slot_status = models.BooleanField(default=False)
     Rate = models.FloatField()
 
+    class Meta:
+        verbose_name = "slots"
+
 
 class Booking(models.Model):
     Booking_id = models.CharField(max_length=40, primary_key=True)
     in_time = models.DateTimeField(auto_now_add=True)
     out_time = models.DateTimeField(auto_now_add=True)
+
     mobile = models.ForeignKey(Customer, on_delete=models.CASCADE,validators=[RegexValidator(
         regex='^(\+91[\-\s]?)?[0]?(91)?[789]\d{9}$', message='should be a valid phone number', code='no match')])
     Invoice = models.ForeignKey(Invoice,on_delete=models.CASCADE,default=0)
@@ -93,25 +127,39 @@ class Booking(models.Model):
 
 
 
+    mobile_no = models.ForeignKey(Customer, on_delete=models.CASCADE, validators=[RegexValidator(
+        regex='^(\+91[\-\s]?)?[0]?(91)?[789]\d{9}$', message='should be a valid phone number', code='no match')])
+    Invoice_id = models.ForeignKey(Invoice, on_delete=models.CASCADE)
+    Slot_no = models.ForeignKey(Slots, on_delete=models.CASCADE)
+
 
 class Services(models.Model):
     Service_id = models.CharField(primary_key=True, max_length=40)
     Type = models.CharField(max_length=10)
 
+
 class Provides(models.Model):
+
     Contract = models.ForeignKey(Contracts,on_delete=models.CASCADE, primary_key=True,default='def')
     Service = models.ForeignKey(Services,on_delete=models.CASCADE,default='def')
+
 
     class Meta:
         unique_together = (("Contract_id", "Service_id"),)
 
-
-
+    Contract_id = models.ForeignKey(
+        Contracts, on_delete=models.CASCADE, primary_key=True)
+    Service_id = models.ForeignKey(Services, on_delete=models.CASCADE)
 
 
 class Bound_by(models.Model):
+
     Contract = models.ForeignKey(Contracts,on_delete=models.CASCADE, primary_key=True,default='def')
     Shop = models.ForeignKey(Shops,on_delete=models.CASCADE,default='def')
 
     class Meta:
         unique_together = (("Contract_id", "Shop_id"),)
+
+    Contract_id = models.ForeignKey(
+        Contracts, on_delete=models.CASCADE, primary_key=True)
+    Shop_id = models.ForeignKey(Shops, on_delete=models.CASCADE)
