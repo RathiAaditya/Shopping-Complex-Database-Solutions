@@ -55,23 +55,6 @@ class Contracts(models.Model):
     class Meta:
         verbose_name_plural = "cid"
 
-
-
-class Invoice(models.Model):
-    Invoice_id = models.CharField(max_length=50, primary_key=True)
-    Amount = models.FloatField()
-    Discount = models.FloatField()
-    GST = models.FloatField()
-    Date_issued = models.DateTimeField(auto_now_add=True)
-    Date_paid = models.DateTimeField(auto_now=True)
-
-    Contract = models.ForeignKey(Contracts,on_delete=models.CASCADE,default='def')
-    issued_by = models.ForeignKey(Companies,on_delete=models.CASCADE, related_name='company_issuing',default='def')
-    issued_to = models.ForeignKey(Companies,on_delete=models.CASCADE, related_name='company_issued',default='def')
-
-    
-
-
 class Contracts(models.Model):
     Type_choices = [
         ('S','Selling'),
@@ -91,8 +74,25 @@ class Contracts(models.Model):
     class Meta:
         verbose_name_plural = "cid"
 
-    Company_id = models.ForeignKey(
+    Company = models.ForeignKey(
         Companies, default=None, on_delete=models.CASCADE)
+
+class Invoice(models.Model):
+    Invoice_id = models.CharField(max_length=50, primary_key=True)
+    Amount = models.FloatField()
+    Discount = models.FloatField()
+    GST = models.FloatField()
+    Date_issued = models.DateTimeField(auto_now_add=True)
+    Date_paid = models.DateTimeField(auto_now=True)
+
+    Contract = models.ForeignKey(Contracts,on_delete=models.CASCADE,default='def')
+    issued_by = models.ForeignKey(Companies,on_delete=models.CASCADE, related_name='company_issuing',default='def')
+    issued_to = models.ForeignKey(Companies,on_delete=models.CASCADE, related_name='company_issued',default='def')
+
+    
+
+
+
 
 
 class Shops(models.Model):
@@ -127,10 +127,7 @@ class Booking(models.Model):
 
 
 
-    mobile_no = models.ForeignKey(Customer, on_delete=models.CASCADE, validators=[RegexValidator(
-        regex='^(\+91[\-\s]?)?[0]?(91)?[789]\d{9}$', message='should be a valid phone number', code='no match')])
-    Invoice_id = models.ForeignKey(Invoice, on_delete=models.CASCADE)
-    Slot_no = models.ForeignKey(Slots, on_delete=models.CASCADE)
+    
 
 
 class Services(models.Model):
@@ -147,9 +144,7 @@ class Provides(models.Model):
     class Meta:
         unique_together = (("Contract_id", "Service_id"),)
 
-    Contract_id = models.ForeignKey(
-        Contracts, on_delete=models.CASCADE, primary_key=True)
-    Service_id = models.ForeignKey(Services, on_delete=models.CASCADE)
+    
 
 
 class Bound_by(models.Model):
@@ -160,6 +155,4 @@ class Bound_by(models.Model):
     class Meta:
         unique_together = (("Contract_id", "Shop_id"),)
 
-    Contract_id = models.ForeignKey(
-        Contracts, on_delete=models.CASCADE, primary_key=True)
-    Shop_id = models.ForeignKey(Shops, on_delete=models.CASCADE)
+    
