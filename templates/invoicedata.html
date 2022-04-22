@@ -73,7 +73,7 @@ h1 {
 /** page structure **/
 #wrapper {
   display: block;
-  width: 850px;
+  width: auto;
   background: #fff;
   margin: 0 auto;
   padding: 10px 17px;
@@ -130,7 +130,7 @@ h1 {
 <body>
     <body>
         <div id="wrapper">
-         <h1>Companies</h1>
+         <h1>Invoices</h1>
          
          <table id="keywords" cellspacing="0" cellpadding="0">
            <thead>
@@ -147,16 +147,18 @@ h1 {
             </tr>
            </thead>
            <tbody>
-             {% for comp in company %}
+             {% for inv in invoice %}
              <tr>
-             {% for item in column %}
-             
-                 <td>{{comp.item}}</td>
-                 <!-- <td>{{comp.name}}</td>
-                 <td>{{comp.email}}</td> -->
-             
-             {% endfor %}
-            </tr>
+                 <td>{{inv.Invoice_id}}</td>
+                 <td>{{inv.Amount}}</td>
+                 <td>{{inv.Discount}}</td>
+                 <td>{{inv.GST}}</td>
+                 <td>{{inv.Date_issued}}</td>
+                 <td>{{inv.Date_paid}}</td>
+                 <td>{{inv.Contract_id}}</td>
+                 <td>{{inv.issued_by_id}}</td>
+                 <td>{{inv.issued_to_id}}</td>
+             </tr>
              {% endfor %} 
            </tbody>
          </table>

@@ -82,7 +82,7 @@ class Invoice(models.Model):
     Amount = models.FloatField()
     Discount = models.FloatField()
     GST = models.FloatField()
-    Date_issued = models.DateTimeField(auto_now_add=True)
+    Date_issued = models.DateTimeField()
     Date_paid = models.DateTimeField(auto_now=True)
 
     Contract = models.ForeignKey(Contracts,on_delete=models.CASCADE,default='def')

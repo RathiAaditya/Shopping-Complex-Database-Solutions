@@ -1,7 +1,7 @@
 from django.http import HttpResponse
 from django.shortcuts import render
 
-from mall.models import Companies, Customer
+from mall.models import Companies, Customer, Invoice
 
 # Create your views here.
 
@@ -53,3 +53,9 @@ def companydata(request):
     all_fields =[field.name for field in Companies._meta.get_fields()]
     del all_fields[0:4]
     return render(request, 'companydata.html',{'company': companies,'column': all_fields})
+
+def invoicedata(request):
+    invoices = Invoice.objects.all()
+    all_fields =[field.name for field in Invoice._meta.get_fields()]
+    del all_fields[0]
+    return render(request, 'invoicedata.html',{'invoice':invoices,'column': all_fields})
