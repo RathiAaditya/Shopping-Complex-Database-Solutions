@@ -79,11 +79,12 @@ WSGI_APPLICATION = 'shmalldb.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'shoppingmall',
-        'USER': 'postgres',
-        'PASSWORD': '1234',
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'mall2',
+        'USER': 'root',
+        'PASSWORD': 'helloworld',
         'HOST': 'localhost',
+        'PORT': '3306',
     }
 }
 
