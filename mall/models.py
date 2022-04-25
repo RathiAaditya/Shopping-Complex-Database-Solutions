@@ -1,6 +1,7 @@
 
 from datetime import date
 import datetime
+from tabnanny import verbose
 from tkinter import CASCADE
 from xmlrpc.client import boolean
 from django.db import models
@@ -9,7 +10,7 @@ from django.core.validators import RegexValidator
 
 
 class Customer(models.Model):
-    mobile_id = models.IntegerField(primary_key=True)
+    mobile_id = models.BigIntegerField(primary_key=True)
     firstname = models.CharField(max_length=30)
     lastname = models.CharField(max_length=30)
     Vaccination_Status = models.BooleanField(default=False)
@@ -22,7 +23,7 @@ class Companies(models.Model):
     email = models.CharField(max_length=70)
 
     class Meta:
-        verbose_name_plural = "Comp"
+        verbose_name_plural = "Companies"
 
 
 class Company_contact_no(models.Model):
@@ -36,41 +37,24 @@ class Company_contact_no(models.Model):
         unique_together = (("Contact_no", "Company_id"),)
 
 
-class Contracts(models.Model):
-    Type_choices = [
-        ('S','Selling'),
-        ('R','Renting')
-    ]
-    Contract_id = models.CharField(max_length=40, primary_key=True)
-    Type = models.CharField(max_length=1, choices=Type_choices)
-    Price = models.FloatField()
-    Start_Date = models.DateTimeField(auto_now_add=True)
-    End_Date = models.DateTimeField(auto_now_add=True)
+# class Contracts(models.Model):
+#     Type_choices = [
+#         ('S','Selling'),
+#         ('R','Renting')
+#     ]
+#     Contract_id = models.CharField(max_length=40, primary_key=True)
+#     Type = models.CharField(max_length=1, choices=Type_choices)
+#     Price = models.FloatField()
+#     Start_Date = models.DateTimeField(auto_now_add=True)
+#     End_Date = models.DateTimeField(auto_now_add=True)
     # Signing_Date = date = models.DateField(
     #     _Feature("Date"), default=date.today)
-    Signing_Date = models.DateField(auto_now_add=True)
-    Billing_Frequency = models.IntegerField()
-    Company = models.ForeignKey(Companies,on_delete=models.CASCADE, default='def')
+    # Signing_Date = models.DateField(auto_now_add=True)
+    # Billing_Frequency = models.IntegerField()
+    # Company = models.ForeignKey(Companies,on_delete=models.CASCADE, default='def')
 
-    class Meta:
-        verbose_name_plural = "cid"
-
-
-
-class Invoice(models.Model):
-    Invoice_id = models.CharField(max_length=50, primary_key=True)
-    Amount = models.FloatField()
-    Discount = models.FloatField()
-    GST = models.FloatField()
-    Date_issued = models.DateTimeField(auto_now_add=True)
-    Date_paid = models.DateTimeField(auto_now=True)
-
-    Contract = models.ForeignKey(Contracts,on_delete=models.CASCADE,default='def')
-    issued_by = models.ForeignKey(Companies,on_delete=models.CASCADE, related_name='company_issuing',default='def')
-    issued_to = models.ForeignKey(Companies,on_delete=models.CASCADE, related_name='company_issued',default='def')
-
-    
-
+    # class Meta:
+    #     verbose_name_plural = "cid"
 
 class Contracts(models.Model):
     Type_choices = [
@@ -89,10 +73,29 @@ class Contracts(models.Model):
    
 
     class Meta:
-        verbose_name_plural = "cid"
+        verbose_name_plural = "Contracts"
 
-    Company_id = models.ForeignKey(
+    Company = models.ForeignKey(
         Companies, default=None, on_delete=models.CASCADE)
+
+class Invoice(models.Model):
+    Invoice_id = models.CharField(max_length=50, primary_key=True)
+    Amount = models.FloatField()
+    Discount = models.FloatField()
+    GST = models.FloatField()
+    Date_issued = models.DateTimeField()
+    Date_paid = models.DateTimeField(auto_now=True)
+
+    Contract = models.ForeignKey(Contracts,on_delete=models.CASCADE,default='def')
+    issued_by = models.ForeignKey(Companies,on_delete=models.CASCADE, related_name='company_issuing',default='def')
+    issued_to = models.ForeignKey(Companies,on_delete=models.CASCADE, related_name='company_issued',default='def')
+    class Meta:
+        verbose_name_plural = "Invoices"
+
+    
+
+
+
 
 
 class Shops(models.Model):
@@ -104,6 +107,8 @@ class Shops(models.Model):
     ]
     Shop_id = models.CharField(max_length=40, primary_key=True)
     Status = models.CharField(max_length=1,choices=Status_choices,default='E')
+    class Meta:
+        verbose_name_plural = "Shops"
 
 
 class Slots(models.Model):
@@ -112,7 +117,7 @@ class Slots(models.Model):
     Rate = models.FloatField()
 
     class Meta:
-        verbose_name = "slots"
+        verbose_name_plural = "Slots"
 
 
 class Booking(models.Model):
@@ -124,18 +129,19 @@ class Booking(models.Model):
         regex='^(\+91[\-\s]?)?[0]?(91)?[789]\d{9}$', message='should be a valid phone number', code='no match')])
     Invoice = models.ForeignKey(Invoice,on_delete=models.CASCADE,default=0)
     Slot = models.ForeignKey(Slots,on_delete=models.CASCADE,default='def' )
+    class Meta:
+        verbose_name_plural = "Bookings"
 
 
 
-    mobile_no = models.ForeignKey(Customer, on_delete=models.CASCADE, validators=[RegexValidator(
-        regex='^(\+91[\-\s]?)?[0]?(91)?[789]\d{9}$', message='should be a valid phone number', code='no match')])
-    Invoice_id = models.ForeignKey(Invoice, on_delete=models.CASCADE)
-    Slot_no = models.ForeignKey(Slots, on_delete=models.CASCADE)
+    
 
 
 class Services(models.Model):
     Service_id = models.CharField(primary_key=True, max_length=40)
     Type = models.CharField(max_length=10)
+    class Meta:
+        verbose_name_plural = "Services"
 
 
 class Provides(models.Model):
@@ -146,10 +152,9 @@ class Provides(models.Model):
 
     class Meta:
         unique_together = (("Contract_id", "Service_id"),)
+        verbose_name_plural = "Provides"
 
-    Contract_id = models.ForeignKey(
-        Contracts, on_delete=models.CASCADE, primary_key=True)
-    Service_id = models.ForeignKey(Services, on_delete=models.CASCADE)
+    
 
 
 class Bound_by(models.Model):
@@ -159,7 +164,6 @@ class Bound_by(models.Model):
 
     class Meta:
         unique_together = (("Contract_id", "Shop_id"),)
+        verbose_name_plural = "Bound_by"
 
-    Contract_id = models.ForeignKey(
-        Contracts, on_delete=models.CASCADE, primary_key=True)
-    Shop_id = models.ForeignKey(Shops, on_delete=models.CASCADE)
+    
