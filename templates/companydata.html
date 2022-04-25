@@ -149,19 +149,22 @@ h1 {
            <tbody>
              {% for comp in company %}
              <tr>
-             {% for item in column %}
-             
-                 <td>{{comp.item}}</td>
-                 <!-- <td>{{comp.name}}</td>
-                 <td>{{comp.email}}</td> -->
-             
-             {% endfor %}
+                 <td>{{comp.Company_id}}</td>
+                 <td>{{comp.name}}</td> 
+                 <td>{{comp.email}}</td> 
             </tr>
              {% endfor %} 
            </tbody>
          </table>
         </div> 
-        <a href="/"><h1>Home</h1></a>
+        <a href="/"><h1>Home</h1></a><br><br>
+        <h1>Use this form to search by name</h1>
+        <form method="POST" action="/company/search">
+          <!-- {% csrf_token %} -->
+          <input type="text" name="textfield">
+          
+          <button type="submit">Search</button>
+          </form>
        </body>
        
 </body>

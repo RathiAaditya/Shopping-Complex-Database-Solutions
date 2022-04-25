@@ -50,6 +50,7 @@ def customerdata(request):
 
 def companydata(request):
     companies = Companies.objects.all()
+    
     all_fields =[field.name for field in Companies._meta.get_fields()]
     del all_fields[0:4]
     return render(request, 'companydata.html',{'company': companies,'column': all_fields})
@@ -59,3 +60,17 @@ def invoicedata(request):
     all_fields =[field.name for field in Invoice._meta.get_fields()]
     del all_fields[0]
     return render(request, 'invoicedata.html',{'invoice':invoices,'column': all_fields})
+
+
+def search(request):
+    if request.method == 'POST':
+        search_id = request.POST.get('textfield', None)
+        user = Companies.objects.filter(name__startswith=search_id)
+        data ="<TABLE><TBODY><TR>"
+        for i in user:
+            data += ("<TD>"+i.name+"</TD>")
+            data += ("<TD>"+i.email+"</TD>")
+        data += ("</TR></TBODY></TABLE>")
+        return HttpResponse(data)
+    else:
+        return render(request, 'companydata.html')
