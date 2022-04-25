@@ -131,19 +131,13 @@ h1 {
     <body>
         <div id="wrapper">
          <h1>Customers</h1>
-         
+         {% if fl %} 
          <table id="keywords" cellspacing="0" cellpadding="0">
            <thead>
             <tr>
-               {% for item in column %} 
-             
+               {% for item in column %}              
                <th><span>{{item}}</span></th>
-               <!-- <th><span>Impressions</span></th>
-               <th><span>Clicks</span></th>
-               <th><span>CTR</span></th>
-               <th><span>Rank</span></th> -->
-            
-             {% endfor %}
+              {% endfor %}
             </tr>
            </thead>
            <tbody>
@@ -158,8 +152,40 @@ h1 {
              {% endfor %} 
            </tbody>
          </table>
+         {% else %} 
+         <table id="keywords" cellspacing="0" cellpadding="0">
+          <thead>
+           <tr>
+              {% for item in column %}              
+              <th><span>{{item}}</span></th>
+             {% endfor %}
+           </tr>
+          </thead>
+          <tbody>
+            {% for sr in search %}
+            <tr>
+                <td>{{sr.mobile_id}}</td>
+                <td>{{sr.firstname}}</td>
+                <td>{{sr.lastname}}</td>
+                <td>{{sr.Vaccination_Status}}</td>
+                <td>{{sr.Vehicle_id}}</td>
+            </tr>
+            {% endfor %} 
+          </tbody>
+        </table>         
+        {% endif %} 
         </div> 
+        {% if not fl %} 
+        <a href="/customer" style="margin-left: 600px;"><h1>View All</h1></a>
+        {% endif %} 
         <div><a href="/"><h1>Home</h1></a></div>
+        <h1>Use this form to search by name</h1>
+        <form method="POST" action="/customer/search">
+          {% csrf_token %}
+          <input type="text" name="textfield" style="margin-left: 700px;">
+          
+          <button type="submit">Search</button>
+          </form>
         
        </body>
 
