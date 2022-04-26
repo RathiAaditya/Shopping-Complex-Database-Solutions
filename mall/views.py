@@ -6,7 +6,7 @@ from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
-from mall.models import Companies, Customer, Invoice, Contracts, AdminModel, Shops, Slots
+from mall.models import Booking, Companies, Customer, Invoice, Contracts, AdminModel, Shops, Slots
 
 # Create your views here.
 
@@ -65,6 +65,14 @@ def companydata(request):
     return render(request, 'companydata.html', {'company': companies, 'column': all_fields, 'fl': flag})
 
 
+def bookingdata(request):
+    companies = Booking.objects.all()
+    all_fields = [field.name for field in Booking._meta.get_fields()]
+
+    flag = True
+    return render(request, 'bookingdata.html', {'company': companies, 'column': all_fields, 'fl': flag})
+
+
 def invoicedata(request):
     invoices = Invoice.objects.all()
     all_fields = [field.name for field in Invoice._meta.get_fields()]
@@ -109,6 +117,16 @@ def searchslot(request):
         del all_fields[0]
         flag = False
         return render(request, 'slotdata.html', {'search': searched, 'column': all_fields, 'fl': flag})
+
+
+def searchbooking(request):
+    if request.method == 'POST':
+        search_id = request.POST.get('textfield', None)
+        searched = Slots.objects.filter(Booking_id__startswith=search_id)
+        all_fields = [field.name for field in Booking._meta.get_fields()]
+        # del all_fields[0]
+        flag = False
+        return render(request, 'bookingdata.html', {'search': searched, 'column': all_fields, 'fl': flag})
 
 
 def searchcustomer(request):
