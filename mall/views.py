@@ -85,6 +85,7 @@ def invoicedata(request):
     invoices = Invoice.objects.all()
     all_fields = [field.name for field in Invoice._meta.get_fields()]
     del all_fields[0]
+    del all_fields[2:4]
 
     all_fields.insert(4, 'TotalAmount')
     return render(request, 'invoicedata.html', {'invoice': invoices, 'column': all_fields, 'Invoices': Invoice})
