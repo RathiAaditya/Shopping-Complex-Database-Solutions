@@ -59,7 +59,7 @@ class Contracts(models.Model):
         ('R', 'Renting'),
     ]
     Contract_id = models.CharField(max_length=40, primary_key=True)
-    Type = models.CharField(max_length=1, choices=Type_choices)
+    Type = models.CharField(max_length=1, choices=Type_choices, default='R')
     Price = models.FloatField()
     Start_Date = models.DateTimeField()
     End_Date = models.DateTimeField()
@@ -145,7 +145,7 @@ class Services(models.Model):
 
 class Provides(models.Model):
 
-    Contract = models.ForeignKey(
+    Contract = models.OneToOneField(
         Contracts, on_delete=models.CASCADE, primary_key=True, default='def')
     Service = models.ForeignKey(
         Services, on_delete=models.CASCADE, default='def')
@@ -157,7 +157,7 @@ class Provides(models.Model):
 
 class Bound_by(models.Model):
 
-    Contract = models.ForeignKey(
+    Contract = models.OneToOneField(
         Contracts, on_delete=models.CASCADE, primary_key=True, default='def')
     Shop = models.ForeignKey(Shops, on_delete=models.CASCADE, default='def')
 
