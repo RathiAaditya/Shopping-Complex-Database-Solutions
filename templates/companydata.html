@@ -269,11 +269,14 @@
             </tr>
           </thead>
           <tbody>
-            {% for comp in company %}
+            {% for comp,con in zip %}
             <tr>
               <td>{{comp.Company_id}}</td>
               <td>{{comp.name}}</td>
               <td>{{comp.email}}</td>
+              
+              <td> {% for c in con %} {{c.Contact_no}}  {% endfor %}</td>
+             
             </tr>
             {% endfor %}
           </tbody>

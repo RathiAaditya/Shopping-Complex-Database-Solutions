@@ -7,7 +7,7 @@ from django.contrib import messages
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate,login,logout
 from django.db.models import Q
-from mall.models import Companies, Customer, Invoice, Contracts, AdminModel,Shops,Slots,Services,Booking
+from mall.models import Companies, Company_contact_no, Customer, Invoice, Contracts, AdminModel,Shops,Slots,Services,Booking
 
 # Create your views here.
 
@@ -68,10 +68,15 @@ def slotdata(request):
 
 def companydata(request):
     companies = Companies.objects.all()
+    l = []
+    for i in companies:
+        l.append(Company_contact_no.objects.filter(Company_id = i.Company_id))
+    zipped_data = zip(companies, l)
     all_fields = [field.name for field in Companies._meta.get_fields()]
     del all_fields[0:4]
+    all_fields.append('Contact_nos')
     flag = True
-    return render(request, 'companydata.html', {'company': companies, 'column': all_fields, 'fl': flag})
+    return render(request, 'companydata.html', {'zip': zipped_data, 'column': all_fields, 'fl': flag})
 
 
 def bookingdata(request):

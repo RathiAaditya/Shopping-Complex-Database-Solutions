@@ -6,7 +6,7 @@ from tkinter import CASCADE
 from xmlrpc.client import boolean
 from django.db import models
 from django.core.validators import RegexValidator
-from django.db.models import F
+from django.db.models import F,UniqueConstraint
 # Create your models here.
 
 
@@ -28,12 +28,8 @@ class Companies(models.Model):
 
 
 class Company_contact_no(models.Model):
-    Contact_no = models.CharField(validators=[RegexValidator(
-        regex='^(\+91[\-\s]?)?[0]?(91)?[789]\d{9}$', message='should be a valid phone number', code='no match')], max_length=12)
-
-    Company = models.ForeignKey(
-        Companies, on_delete=models.CASCADE, primary_key=True, default='def')
-
+    Contact_no = models.CharField(validators=[RegexValidator(regex='^(\+91[\-\s]?)?[0]?(91)?[789]\d{9}$', message='should be a valid phone number', code='no match')], max_length=12)
+    Company = models.ForeignKey(Companies, on_delete=models.CASCADE,default='def')
     class Meta: 
         unique_together = (("Contact_no", "Company_id"),)
 
