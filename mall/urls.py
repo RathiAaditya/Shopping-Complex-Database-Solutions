@@ -3,11 +3,8 @@ from . import views
 
 urlpatterns = [
     path('', views.index, name='index'),
-
-    
-    path('contract',views.contractdata,name='contract'),
-    path('geninvoice',views.generateInvoice,name='geninv')
-
+    path('home/contract',views.contractdata,name='contract'),
+    path('geninvoice',views.generateInvoice,name='geninv'),
     path('home', views.home, name='home'),
     path('home/customer', views.customerdata, name='customer'),
     path('home/company', views.companydata, name='company'),

@@ -49,6 +49,6 @@ class Migration(migrations.Migration):
             name='slots',
             options={'verbose_name_plural': 'Slots'},
         ),
-        migrations.AlterField(
+        
 
     ]

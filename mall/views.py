@@ -1,6 +1,6 @@
 from urllib import response
 from django.http import HttpResponse
-
+from datetime import date
 from django.shortcuts import render, redirect
 from django.contrib import messages
 from mall.models import Companies, Customer, Invoice, Contracts
@@ -81,7 +81,7 @@ def generateInvoice(request):
     amt = con.Price
     comp = con.Company_id
     bil_freq = con.Billing_Frequency
-    new_inv = Invoice(Invoice_id=150000,Amount=amt, Discount=10,GST=18,Date_issued=date.today(),Date_paid=date.today(),Contract_id=cid, issued_by_id=12000110,issued_to_id=comp)
+    new_inv = Invoice(Invoice_id=150001,Amount=amt, Discount=10,GST=18,Date_issued=date.today(),Date_paid=date.today(),Contract_id=cid, issued_by_id=12000110,issued_to_id=comp)
     new_inv.save()
     return render(request, 'geninvoice.html')
 
