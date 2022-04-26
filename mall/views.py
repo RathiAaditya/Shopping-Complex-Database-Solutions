@@ -86,7 +86,7 @@ def searchcompany(request):
 def searchshop(request):
     if request.method == 'POST':
         search_id = request.POST.get('textfield', None)
-        searched = Shops.objects.filter(name__icontains=search_id)
+        searched = Shops.objects.filter(Shop_id__startswith=search_id)
         all_fields = [field.name for field in Shops._meta.get_fields()]
         del all_fields[0]
         flag = False
