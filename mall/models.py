@@ -28,6 +28,7 @@ class Companies(models.Model):
 
 
 class Company_contact_no(models.Model):
+    
     Contact_no = models.CharField(validators=[RegexValidator(regex='^(\+91[\-\s]?)?[0]?(91)?[789]\d{9}$', message='should be a valid phone number', code='no match')], max_length=12)
     Company = models.ForeignKey(Companies, on_delete=models.CASCADE,default='def')
     class Meta: 
@@ -57,6 +58,7 @@ class Contracts(models.Model):
     Type_choices = [
         ('S', 'Selling'),
         ('R', 'Renting'),
+        ('T', 'Services')
     ]
     Contract_id = models.CharField(max_length=40, primary_key=True)
     Type = models.CharField(max_length=1, choices=Type_choices, default='R')
