@@ -34,7 +34,7 @@ class Company_contact_no(models.Model):
     Company = models.ForeignKey(
         Companies, on_delete=models.CASCADE, primary_key=True, default='def')
 
-    class Meta:
+    class Meta: 
         unique_together = (("Contact_no", "Company_id"),)
 
 
@@ -145,7 +145,7 @@ class Booking(models.Model):
 
 class Services(models.Model):
     Service_id = models.CharField(primary_key=True, max_length=40)
-    Type = models.CharField(max_length=10)
+    Type = models.CharField(max_length=30)
 
     class Meta:
         verbose_name_plural = "Services"

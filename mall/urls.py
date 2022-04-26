@@ -17,4 +17,6 @@ urlpatterns = [
     path('home/slot/search', views.searchslot, name='slotsearch'),
     path('home/booking', views.bookingdata, name='booking data'),
     path('home/booking/search', views.searchbooking, name='bookingsearch'),
+    path('home/service', views.servicedata, name='servicedata'),
+    path('home/service/search', views.searchservice, name='servicesearch'),
 ]

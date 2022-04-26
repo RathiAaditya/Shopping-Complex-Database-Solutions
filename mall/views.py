@@ -6,7 +6,7 @@ from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
-from mall.models import Booking, Companies, Customer, Invoice, Contracts, AdminModel, Shops, Slots
+from mall.models import Booking, Companies, Customer, Invoice, Contracts, AdminModel, Services, Shops, Slots
 
 # Create your views here.
 
@@ -41,6 +41,14 @@ def customerdata(request):
     return render(request, 'customerdata.html', {'customer': customers, 'column': all_fields, 'fl': flag})
 
 
+def servicedata(request):
+    service = Services.objects.all()
+    all_fields = [field.name for field in Services._meta.get_fields()]
+    del all_fields[0]
+    flag = True
+    return render(request, 'servicedata.html', {'services': service, 'column': all_fields, 'fl': flag})
+
+
 def shopdata(request):
     shops = Shops.objects.all()
     all_fields = [field.name for field in Shops._meta.get_fields()]
@@ -66,11 +74,11 @@ def companydata(request):
 
 
 def bookingdata(request):
-    companies = Booking.objects.all()
+    booking = Booking.objects.all()
     all_fields = [field.name for field in Booking._meta.get_fields()]
 
     flag = True
-    return render(request, 'bookingdata.html', {'company': companies, 'column': all_fields, 'fl': flag})
+    return render(request, 'bookingdata.html', {'booking': booking, 'column': all_fields, 'fl': flag})
 
 
 def invoicedata(request):
@@ -107,6 +115,16 @@ def searchshop(request):
         del all_fields[0]
         flag = False
         return render(request, 'shopdata.html', {'search': searched, 'column': all_fields, 'fl': flag})
+
+
+def searchservice(request):
+    if request.method == 'POST':
+        search_id = request.POST.get('textfield', None)
+        searched = Shops.objects.filter(Service_id__startswith=search_id)
+        all_fields = [field.name for field in Shops._meta.get_fields()]
+        del all_fields[0]
+        flag = False
+        return render(request, 'servicedata.html', {'search': searched, 'column': all_fields, 'fl': flag})
 
 
 def searchslot(request):
