@@ -120,7 +120,7 @@ def searchshop(request):
 def searchservice(request):
     if request.method == 'POST':
         search_id = request.POST.get('textfield', None)
-        searched = Shops.objects.filter(Service_id__startswith=search_id)
+        searched = Services.objects.filter(Service_id__startswith=search_id)
         all_fields = [field.name for field in Shops._meta.get_fields()]
         del all_fields[0]
         flag = False
@@ -140,7 +140,7 @@ def searchslot(request):
 def searchbooking(request):
     if request.method == 'POST':
         search_id = request.POST.get('textfield', None)
-        searched = Slots.objects.filter(Booking_id__startswith=search_id)
+        searched = Booking.objects.filter(Booking_id__startswith=search_id)
         all_fields = [field.name for field in Booking._meta.get_fields()]
         # del all_fields[0]
         flag = False
