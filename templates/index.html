@@ -139,7 +139,7 @@
         color: #0000ff;
       }
     </style>
-    <div class="loginBox">
+    <div class="loginBox" style="z-index: 0;">
       <img
         class="user"
         src="https://i.ibb.co/yVGxFPR/23.png"
@@ -166,6 +166,11 @@
         <input type="submit" name="" value="Login" />
       </form>
       <a href="#">Forget Password<br /> </a>
+      {% if messages %}
+      {% for message in messages %}
+      <h5 style="color: red; margin-top: 10px; margin-left:50px">{{message}}</h5>
+      {% endfor %}
+      {% endif %}
     </div>
 
     <!-- Optional JavaScript -->
@@ -204,11 +209,9 @@
       integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
       crossorigin="anonymous"
     ></script>
-    <div>
-      {% for message in messages %}
-      <h3>{{messages}}</h3>
-      {% endfor %}
-    </div>
+      
+      
+    
 
   </body>
 </html>

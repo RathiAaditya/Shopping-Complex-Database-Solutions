@@ -1,9 +1,12 @@
+from asyncio.windows_events import NULL
 from urllib import response
 from django.http import HttpResponse
 from datetime import date
 from django.shortcuts import render, redirect
 from django.contrib import messages
-from mall.models import Companies, Customer, Invoice, Contracts
+from django.contrib.auth.models import User
+from django.contrib.auth import authenticate,login,logout
+from mall.models import Companies, Customer, Invoice, Contracts, AdminModel
 
 # Create your views here.
 
@@ -13,13 +16,22 @@ def index(request):
 
 
 def home(request):
-    username = request.POST['Username']
-    password = request.POST['Password']
-    if username == 'Aaditya' and password == '1234':
-        return render(request, 'home.html', {'name': username})
+    if(request.method == 'POST'):
+        usrname = request.POST['Username']
+        pwd = request.POST['Password']
+        adminuser = authenticate(username=usrname, password=pwd)
+        if adminuser is not None:
+            login(request, adminuser)
+            return render(request, 'home.html', {'name': usrname})
+        else:
+            messages.info(request, 'Invalid Credentials')
+            return redirect('/')
     else:
-        messages.info(request, 'Invalid Credentials')
-        return redirect('/')
+        
+        adminname = request.user.username
+        print(adminname)
+        return render(request, 'home.html',{'name': adminname})
+
 
 
 def customerdata(request):

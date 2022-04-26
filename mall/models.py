@@ -176,3 +176,5 @@ class Bound_by(models.Model):
         verbose_name_plural = "Bound_by"
 
     
+class AdminModel(models.Model):
+    admin_name = models.CharField(max_length=100,default='def')
