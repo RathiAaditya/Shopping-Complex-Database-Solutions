@@ -6,6 +6,7 @@ from tkinter import CASCADE
 from xmlrpc.client import boolean
 from django.db import models
 from django.core.validators import RegexValidator
+from django.db.models import F
 # Create your models here.
 
 
@@ -64,11 +65,11 @@ class Contracts(models.Model):
     Contract_id = models.CharField(max_length=40, primary_key=True)
     Type = models.CharField(max_length =1, choices= Type_choices)
     Price = models.FloatField()
-    Start_Date = models.DateTimeField(auto_now_add=True)
-    End_Date = models.DateTimeField(auto_now_add=True)
+    Start_Date = models.DateTimeField()
+    End_Date = models.DateTimeField()
 
 
-    Signing_Date = models.DateField(auto_now_add=True)
+    Signing_Date = models.DateField()
     Billing_Frequency = models.IntegerField()
    
 
@@ -78,21 +79,29 @@ class Contracts(models.Model):
     Company = models.ForeignKey(
         Companies, default=None, on_delete=models.CASCADE)
 
+# class InvoiceManager(models.Manager):
+#     def get_queryset(self): 
+#         qs = super(InvoiceManager,self).get_queryset().annotate()
+
 class Invoice(models.Model):
     Invoice_id = models.CharField(max_length=50, primary_key=True)
     Amount = models.FloatField()
     Discount = models.FloatField()
     GST = models.FloatField()
     Date_issued = models.DateTimeField()
-    Date_paid = models.DateTimeField(auto_now=True)
-
+    Date_paid = models.DateTimeField()
     Contract = models.ForeignKey(Contracts,on_delete=models.CASCADE,default='def')
     issued_by = models.ForeignKey(Companies,on_delete=models.CASCADE, related_name='company_issuing',default='def')
     issued_to = models.ForeignKey(Companies,on_delete=models.CASCADE, related_name='company_issued',default='def')
     class Meta:
         verbose_name_plural = "Invoices"
-
+    @property
+    def totalamount(self):
+        temp = self.Amount - self.Amount*(self.Discount/100)
+        return temp + temp*(self.GST/100)
     
+    
+
 
 
 
@@ -122,8 +131,8 @@ class Slots(models.Model):
 
 class Booking(models.Model):
     Booking_id = models.CharField(max_length=40, primary_key=True)
-    in_time = models.DateTimeField(auto_now_add=True)
-    out_time = models.DateTimeField(auto_now_add=True)
+    in_time = models.DateTimeField()
+    out_time = models.DateTimeField()
 
     mobile = models.ForeignKey(Customer, on_delete=models.CASCADE,validators=[RegexValidator(
         regex='^(\+91[\-\s]?)?[0]?(91)?[789]\d{9}$', message='should be a valid phone number', code='no match')])

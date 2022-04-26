@@ -78,14 +78,16 @@ WSGI_APPLICATION = 'shmalldb.wsgi.application'
 # https://docs.djangoproject.com/en/4.0/ref/settings/#databases
 
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'mall2',
-        'USER': 'root',
-        'PASSWORD': 'helloworld',
-        'HOST': 'localhost',
-        'PORT': '3306',
-    }
+
+        'default': {
+            'ENGINE': 'django.db.backends.mysql',
+            'NAME': 'mall2',
+            'HOST': '127.0.0.1',
+            'PORT': '3306',
+            'USER': 'root',
+            'PASSWORD': 'shreyas123',
+        }   
+
 }
 
 
