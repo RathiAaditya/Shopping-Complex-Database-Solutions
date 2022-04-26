@@ -1,7 +1,7 @@
 from django.http import HttpResponse
 from django.shortcuts import render
-
-from mall.models import Companies, Customer, Invoice
+from datetime import date
+from mall.models import Companies, Contracts, Customer, Invoice
 
 # Create your views here.
 
@@ -31,6 +31,12 @@ def invoicedata(request):
     all_fields.insert(4,'TotalAmount')
     return render(request, 'invoicedata.html',{'invoice':invoices,'column': all_fields, 'Invoices':Invoice})
 
+def contractdata(request):
+    contracts = Contracts.objects.all()
+    all_fields =[field.name for field in Contracts._meta.get_fields()]
+    del all_fields[0:3]
+    return render(request, 'contractdata.html',{'contract':contracts,'column': all_fields})
+
 
 def searchcompany(request):
     if request.method == 'POST':
@@ -49,3 +55,14 @@ def searchcustomer(request):
         del all_fields[0]
         flag = False 
         return render(request, 'customerdata.html',{'search':searched, 'column': all_fields, 'fl':flag })
+
+def generateInvoice(request):
+    cid = request.POST.get('textfield', None)
+    con = Contracts.objects.get(Contract_id=cid)
+    stdate = con.Start_Date
+    amt = con.Price
+    comp = con.Company_id
+    bil_freq = con.Billing_Frequency
+    new_inv = Invoice(Invoice_id=150000,Amount=amt, Discount=10,GST=18,Date_issued=date.today(),Date_paid=date.today(),Contract_id=cid, issued_by_id=12000110,issued_to_id=comp)
+    new_inv.save()
+    return render(request, 'geninvoice.html')

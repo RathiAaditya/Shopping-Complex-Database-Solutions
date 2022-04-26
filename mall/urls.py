@@ -7,5 +7,7 @@ urlpatterns = [
     path('company',views.companydata,name='company'),
     path('invoice',views.invoicedata,name='invoice'),
     path('company/search',views.searchcompany,name='companysearch'),
-    path('customer/search',views.searchcustomer,name='customersearch')
+    path('customer/search',views.searchcustomer,name='customersearch'),
+    path('contract',views.contractdata,name='contract'),
+    path('geninvoice',views.generateInvoice,name='geninv')
 ]
