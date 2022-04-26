@@ -153,7 +153,7 @@ class Services(models.Model):
 
 class Provides(models.Model):
 
-    Contract = models.ForeignKey(
+    Contract = models.OneToOneField(
         Contracts, on_delete=models.CASCADE, primary_key=True, default='def')
     Service = models.ForeignKey(
         Services, on_delete=models.CASCADE, default='def')
@@ -165,7 +165,7 @@ class Provides(models.Model):
 
 class Bound_by(models.Model):
 
-    Contract = models.ForeignKey(
+    Contract = models.OneToOneField(
         Contracts, on_delete=models.CASCADE, primary_key=True, default='def')
     Shop = models.ForeignKey(Shops, on_delete=models.CASCADE, default='def')
 

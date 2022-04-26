@@ -255,13 +255,11 @@
   </head>
   <body>
     <body>
-
       <div id="wrapper">
         <h1>Invoices</h1>
 
         <table id="keywords" cellspacing="0" cellpadding="0">
           <thead>
-
             <tr>
               {% for item in column %}
 
@@ -273,27 +271,25 @@
 
               {% endfor %}
             </tr>
-
-           </thead>
-           <tbody>
-             {% for inv in invoice %}
-             <tr>
-                 <td>{{inv.Invoice_id}}</td>
-                 <td>{{inv.Amount}}</td>
-                 <td>{{inv.Discount}}</td>
-                 <td>{{inv.GST}}</td>
-                 <td>{{inv.totalamount}}</td>
-                 <td>{{inv.Date_issued}}</td>
-                 <td>{{inv.Date_paid}}</td>
-                 <td>{{inv.Contract_id}}</td>
-                 <td>{{inv.issued_by_id}}</td>
-                 <td>{{inv.issued_to_id}}</td>
-             </tr>
-             {% endfor %} 
-           </tbody>
-         </table>
-        </div> 
-        
+          </thead>
+          <tbody>
+            {% for inv in invoice %}
+            <tr>
+              <td>{{inv.Invoice_id}}</td>
+              <td>{{inv.Amount}}</td>
+              <td>{{inv.Discount}}</td>
+              <td>{{inv.GST}}</td>
+              <td>{{inv.totalamount}}</td>
+              <td>{{inv.Date_issued}}</td>
+              <td>{{inv.Date_paid}}</td>
+              <td>{{inv.Contract_id}}</td>
+              <td>{{inv.issued_by.name}}</td>
+              <td>{{inv.issued_to.name}}</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
 
       <a href="/home"><h1>Home</h1></a>
     </body>
@@ -305,4 +301,3 @@
     });
   </script>
 </html>
-
