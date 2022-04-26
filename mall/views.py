@@ -5,8 +5,8 @@ from datetime import date
 from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.contrib.auth.models import User
-from django.contrib.auth import authenticate,login,logout
-from mall.models import Companies, Customer, Invoice, Contracts, AdminModel
+from django.contrib.auth import authenticate, login, logout
+from mall.models import Companies, Customer, Invoice, Contracts, AdminModel, Shops
 
 # Create your views here.
 
@@ -27,11 +27,10 @@ def home(request):
             messages.info(request, 'Invalid Credentials')
             return redirect('/')
     else:
-        
+
         adminname = request.user.username
         print(adminname)
-        return render(request, 'home.html',{'name': adminname})
-
+        return render(request, 'home.html', {'name': adminname})
 
 
 def customerdata(request):
@@ -40,6 +39,14 @@ def customerdata(request):
     del all_fields[0]
     flag = True
     return render(request, 'customerdata.html', {'customer': customers, 'column': all_fields, 'fl': flag})
+
+
+def shopdata(request):
+    shops = Shops.objects.all()
+    all_fields = [field.name for field in Shops._meta.get_fields()]
+    del all_fields[0]
+    flag = True
+    return render(request, 'shopdata.html', {'shop': shops, 'column': all_fields, 'fl': flag})
 
 
 def companydata(request):
@@ -55,15 +62,15 @@ def invoicedata(request):
     all_fields = [field.name for field in Invoice._meta.get_fields()]
     del all_fields[0]
 
-    all_fields.insert(4,'TotalAmount')
-    return render(request, 'invoicedata.html',{'invoice':invoices,'column': all_fields, 'Invoices':Invoice})
+    all_fields.insert(4, 'TotalAmount')
+    return render(request, 'invoicedata.html', {'invoice': invoices, 'column': all_fields, 'Invoices': Invoice})
+
 
 def contractdata(request):
     contracts = Contracts.objects.all()
-    all_fields =[field.name for field in Contracts._meta.get_fields()]
+    all_fields = [field.name for field in Contracts._meta.get_fields()]
     del all_fields[0:3]
-    return render(request, 'contractdata.html',{'contract':contracts,'column': all_fields})
-
+    return render(request, 'contractdata.html', {'contract': contracts, 'column': all_fields})
 
 
 def searchcompany(request):
@@ -76,6 +83,16 @@ def searchcompany(request):
         return render(request, 'companydata.html', {'search': searched, 'column': all_fields, 'fl': flag})
 
 
+def searchshop(request):
+    if request.method == 'POST':
+        search_id = request.POST.get('textfield', None)
+        searched = Shops.objects.filter(name__icontains=search_id)
+        all_fields = [field.name for field in Shops._meta.get_fields()]
+        del all_fields[0]
+        flag = False
+        return render(request, 'shopdata.html', {'search': searched, 'column': all_fields, 'fl': flag})
+
+
 def searchcustomer(request):
     if request.method == 'POST':
         search_id = request.POST.get('textfield', None)
@@ -83,8 +100,9 @@ def searchcustomer(request):
         all_fields = [field.name for field in Customer._meta.get_fields()]
         del all_fields[0]
 
-        flag = False 
-        return render(request, 'customerdata.html',{'search':searched, 'column': all_fields, 'fl':flag })
+        flag = False
+        return render(request, 'customerdata.html', {'search': searched, 'column': all_fields, 'fl': flag})
+
 
 def generateInvoice(request):
     cid = request.POST.get('textfield', None)
@@ -93,7 +111,7 @@ def generateInvoice(request):
     amt = con.Price
     comp = con.Company_id
     bil_freq = con.Billing_Frequency
-    new_inv = Invoice(Invoice_id=150001,Amount=amt, Discount=10,GST=18,Date_issued=date.today(),Date_paid=date.today(),Contract_id=cid, issued_by_id=12000110,issued_to_id=comp)
+    new_inv = Invoice(Invoice_id=150001, Amount=amt, Discount=10, GST=18, Date_issued=date.today(
+    ), Date_paid=date.today(), Contract_id=cid, issued_by_id=12000110, issued_to_id=comp)
     new_inv.save()
     return render(request, 'geninvoice.html')
-

@@ -31,8 +31,8 @@ class Company_contact_no(models.Model):
     Contact_no = models.CharField(validators=[RegexValidator(
         regex='^(\+91[\-\s]?)?[0]?(91)?[789]\d{9}$', message='should be a valid phone number', code='no match')], max_length=12)
 
-    Company = models.ForeignKey(Companies,on_delete=models.CASCADE,primary_key=True,default='def')
-
+    Company = models.ForeignKey(
+        Companies, on_delete=models.CASCADE, primary_key=True, default='def')
 
     class Meta:
         unique_together = (("Contact_no", "Company_id"),)
@@ -59,19 +59,17 @@ class Company_contact_no(models.Model):
 
 class Contracts(models.Model):
     Type_choices = [
-        ('S','Selling'),
-        ('R','Renting'),
+        ('S', 'Selling'),
+        ('R', 'Renting'),
     ]
     Contract_id = models.CharField(max_length=40, primary_key=True)
-    Type = models.CharField(max_length =1, choices= Type_choices)
+    Type = models.CharField(max_length=1, choices=Type_choices)
     Price = models.FloatField()
     Start_Date = models.DateTimeField()
     End_Date = models.DateTimeField()
 
-
     Signing_Date = models.DateField()
     Billing_Frequency = models.IntegerField()
-   
 
     class Meta:
         verbose_name_plural = "Contracts"
@@ -80,8 +78,9 @@ class Contracts(models.Model):
         Companies, default=None, on_delete=models.CASCADE)
 
 # class InvoiceManager(models.Manager):
-#     def get_queryset(self): 
+#     def get_queryset(self):
 #         qs = super(InvoiceManager,self).get_queryset().annotate()
+
 
 class Invoice(models.Model):
     Invoice_id = models.CharField(max_length=50, primary_key=True)
@@ -90,32 +89,33 @@ class Invoice(models.Model):
     GST = models.FloatField()
     Date_issued = models.DateTimeField()
     Date_paid = models.DateTimeField()
-    Contract = models.ForeignKey(Contracts,on_delete=models.CASCADE,default='def')
-    issued_by = models.ForeignKey(Companies,on_delete=models.CASCADE, related_name='company_issuing',default='def')
-    issued_to = models.ForeignKey(Companies,on_delete=models.CASCADE, related_name='company_issued',default='def')
+    Contract = models.ForeignKey(
+        Contracts, on_delete=models.CASCADE, default='def')
+    issued_by = models.ForeignKey(
+        Companies, on_delete=models.CASCADE, related_name='company_issuing', default='def')
+    issued_to = models.ForeignKey(
+        Companies, on_delete=models.CASCADE, related_name='company_issued', default='def')
+
     class Meta:
         verbose_name_plural = "Invoices"
+
     @property
     def totalamount(self):
         temp = self.Amount - self.Amount*(self.Discount/100)
         return temp + temp*(self.GST/100)
-    
-    
-
-
-
-
 
 
 class Shops(models.Model):
     Status_choices = [
-        ('S','Sold'),
-        ('R','Rented'),
+        ('S', 'Sold'),
+        ('R', 'Rented'),
 
-        ('E','Empty')
+        ('E', 'Empty')
     ]
     Shop_id = models.CharField(max_length=40, primary_key=True)
-    Status = models.CharField(max_length=1,choices=Status_choices,default='E')
+    Status = models.CharField(
+        max_length=1, choices=Status_choices, default='E')
+
     class Meta:
         verbose_name_plural = "Shops"
 
@@ -134,47 +134,45 @@ class Booking(models.Model):
     in_time = models.DateTimeField()
     out_time = models.DateTimeField()
 
-    mobile = models.ForeignKey(Customer, on_delete=models.CASCADE,validators=[RegexValidator(
+    mobile = models.ForeignKey(Customer, on_delete=models.CASCADE, validators=[RegexValidator(
         regex='^(\+91[\-\s]?)?[0]?(91)?[789]\d{9}$', message='should be a valid phone number', code='no match')])
-    Invoice = models.ForeignKey(Invoice,on_delete=models.CASCADE,default=0)
-    Slot = models.ForeignKey(Slots,on_delete=models.CASCADE,default='def' )
+    Invoice = models.ForeignKey(Invoice, on_delete=models.CASCADE, default=0)
+    Slot = models.ForeignKey(Slots, on_delete=models.CASCADE, default='def')
+
     class Meta:
         verbose_name_plural = "Bookings"
-
-
-
-    
 
 
 class Services(models.Model):
     Service_id = models.CharField(primary_key=True, max_length=40)
     Type = models.CharField(max_length=10)
+
     class Meta:
         verbose_name_plural = "Services"
 
 
 class Provides(models.Model):
 
-    Contract = models.ForeignKey(Contracts,on_delete=models.CASCADE, primary_key=True,default='def')
-    Service = models.ForeignKey(Services,on_delete=models.CASCADE,default='def')
-
+    Contract = models.ForeignKey(
+        Contracts, on_delete=models.CASCADE, primary_key=True, default='def')
+    Service = models.ForeignKey(
+        Services, on_delete=models.CASCADE, default='def')
 
     class Meta:
         unique_together = (("Contract_id", "Service_id"),)
         verbose_name_plural = "Provides"
 
-    
-
 
 class Bound_by(models.Model):
 
-    Contract = models.ForeignKey(Contracts,on_delete=models.CASCADE, primary_key=True,default='def')
-    Shop = models.ForeignKey(Shops,on_delete=models.CASCADE,default='def')
+    Contract = models.ForeignKey(
+        Contracts, on_delete=models.CASCADE, primary_key=True, default='def')
+    Shop = models.ForeignKey(Shops, on_delete=models.CASCADE, default='def')
 
     class Meta:
         unique_together = (("Contract_id", "Shop_id"),)
         verbose_name_plural = "Bound_by"
 
-    
+
 class AdminModel(models.Model):
-    admin_name = models.CharField(max_length=100,default='def')
+    admin_name = models.CharField(max_length=100, default='def')
