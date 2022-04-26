@@ -12,5 +12,7 @@ urlpatterns = [
     path('home/company/search', views.searchcompany, name='companysearch'),
     path('home/customer/search', views.searchcustomer, name='customersearch'),
     path('home/shop', views.shopdata, name='Shops'),
-    path('home/shop/search', views.searchshop, name='shopsearch')
+    path('home/shop/search', views.searchshop, name='shopsearch'),
+    path('home/slot', views.slotdata, name='slotdata'),
+    path('home/slot/search', views.searchslot, name='slotsearch'),
 ]
