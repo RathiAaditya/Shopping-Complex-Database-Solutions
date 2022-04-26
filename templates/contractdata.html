@@ -153,7 +153,7 @@ h1 {
                  <td>{{cont.End_Date}}</td> 
                  <td>{{cont.Signing_Date}}</td> 
                  <td>{{cont.Billing_Frequency}}</td> 
-                 <td>{{cont.Company_id}}</td> 
+                 <td>{{cont.Company.name}}</td> 
             </tr>
              {% endfor %} 
            </tbody>
@@ -185,7 +185,7 @@ h1 {
         <!-- {% if not fl %} 
         <a href="/company" style="margin-left: 600px;"><h1>View All</h1></a>
         {% endif %}  -->
-        <a href="/"><h1>Home</h1></a><br><br>
+        <a href="/home"><h1>Home</h1></a><br><br>
         <h1>Use this form to enter cid for invoice</h1>
         <form method="POST" action="/geninvoice">
           {% csrf_token %}

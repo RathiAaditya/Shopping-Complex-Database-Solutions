@@ -1,11 +1,12 @@
 from asyncio.windows_events import NULL
 from urllib import response
 from django.http import HttpResponse
-from datetime import date
+from datetime import date, timedelta
 from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate,login,logout
+from django.db.models import Q
 from mall.models import Companies, Customer, Invoice, Contracts, AdminModel
 
 # Create your views here.
@@ -52,6 +53,12 @@ def companydata(request):
 
 def invoicedata(request):
     invoices = Invoice.objects.all()
+    # comps_by = []
+    # comps_to = []
+    # for i in invoices:
+    #     comps_by.append(Companies.objects.get(Company_id = i.issued_by_id))
+    #     comps_to.append(Companies.objects.get(Company_id = i.issued_to_id))
+    # print(comps_by)
     all_fields = [field.name for field in Invoice._meta.get_fields()]
     del all_fields[0]
 
@@ -79,7 +86,8 @@ def searchcompany(request):
 def searchcustomer(request):
     if request.method == 'POST':
         search_id = request.POST.get('textfield', None)
-        searched = Customer.objects.filter(firstname__icontains=search_id)
+        filterfields = Q(firstname__icontains=search_id)| Q(lastname__icontains=search_id) |Q(mobile_id__icontains=search_id)
+        searched = Customer.objects.filter(filterfields)
         all_fields = [field.name for field in Customer._meta.get_fields()]
         del all_fields[0]
 
@@ -89,11 +97,18 @@ def searchcustomer(request):
 def generateInvoice(request):
     cid = request.POST.get('textfield', None)
     con = Contracts.objects.get(Contract_id=cid)
+    flag = True
     stdate = con.Start_Date
     amt = con.Price
     comp = con.Company_id
     bil_freq = con.Billing_Frequency
-    new_inv = Invoice(Invoice_id=150001,Amount=amt, Discount=10,GST=18,Date_issued=date.today(),Date_paid=date.today(),Contract_id=cid, issued_by_id=12000110,issued_to_id=comp)
-    new_inv.save()
-    return render(request, 'geninvoice.html')
+    no_of_days = (date.today() - stdate.date()).days
+    num_of_invoices = int(no_of_days / bil_freq)
+    for i in range(num_of_invoices):
+        new_inv = Invoice(Amount=amt, Discount=10,GST=18,Date_issued=stdate+timedelta(i*bil_freq),Date_paid=date.today()+timedelta(4),Contract_id=cid, issued_by_id=12000110,issued_to_id=comp)
+        new_inv.save()
+    # except:
+    #     flag = False
+    
+    return render(request, 'geninvoice.html',{'fl':flag})
 

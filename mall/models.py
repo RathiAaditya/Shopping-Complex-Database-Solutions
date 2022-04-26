@@ -84,12 +84,12 @@ class Contracts(models.Model):
 #         qs = super(InvoiceManager,self).get_queryset().annotate()
 
 class Invoice(models.Model):
-    Invoice_id = models.CharField(max_length=50, primary_key=True)
+    Invoice_id = models.AutoField(primary_key=True)
     Amount = models.FloatField()
     Discount = models.FloatField()
     GST = models.FloatField()
     Date_issued = models.DateTimeField()
-    Date_paid = models.DateTimeField()
+    Date_paid = models.DateTimeField(blank=True)
     Contract = models.ForeignKey(Contracts,on_delete=models.CASCADE,default='def')
     issued_by = models.ForeignKey(Companies,on_delete=models.CASCADE, related_name='company_issuing',default='def')
     issued_to = models.ForeignKey(Companies,on_delete=models.CASCADE, related_name='company_issued',default='def')
