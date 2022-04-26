@@ -32,9 +32,9 @@ class Company_contact_no(models.Model):
         regex='^(\+91[\-\s]?)?[0]?(91)?[789]\d{9}$', message='should be a valid phone number', code='no match')], max_length=12)
 
     Company = models.ForeignKey(
-        Companies, on_delete=models.CASCADE, primary_key=True, default='def')
+        Companies, on_delete=models.CASCADE, default='def')
 
-    class Meta: 
+    class Meta:
         unique_together = (("Contact_no", "Company_id"),)
 
 
@@ -63,7 +63,7 @@ class Contracts(models.Model):
         ('R', 'Renting'),
     ]
     Contract_id = models.CharField(max_length=40, primary_key=True)
-    Type = models.CharField(max_length=1, choices=Type_choices)
+    Type = models.CharField(max_length=1, choices=Type_choices, default='R')
     Price = models.FloatField()
     Start_Date = models.DateTimeField()
     End_Date = models.DateTimeField()
