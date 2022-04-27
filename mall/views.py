@@ -6,9 +6,9 @@ from dateutil.relativedelta import relativedelta
 from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.contrib.auth.models import User
-from django.contrib.auth import authenticate,login,logout
+from django.contrib.auth import authenticate, login, logout
 from django.db.models import Q
-from mall.models import Companies, Company_contact_no, Customer, Invoice, Contracts, AdminModel, Provides,Shops,Slots,Services,Booking
+from mall.models import Companies, Company_contact_no, Customer, Invoice, Contracts, AdminModel, Provides, Shops, Slots, Services, Booking
 
 # Create your views here.
 
@@ -33,6 +33,10 @@ def home(request):
         adminname = request.user.username
         print(adminname)
         return render(request, 'home.html', {'name': adminname})
+
+
+def otp(request):
+    return render(request, 'otp.html')
 
 
 def customerdata(request):
@@ -71,7 +75,7 @@ def companydata(request):
     companies = Companies.objects.all()
     l = []
     for i in companies:
-        l.append(Company_contact_no.objects.filter(Company_id = i.Company_id))
+        l.append(Company_contact_no.objects.filter(Company_id=i.Company_id))
     zipped_data = zip(companies, l)
     all_fields = [field.name for field in Companies._meta.get_fields()]
     del all_fields[0:4]
@@ -126,13 +130,14 @@ def contractdata(request):
     del all_fields[0:3]
     return render(request, 'contractdata.html', {'contract': contracts, 'column': all_fields})
 
+
 def providesdata(request):
     provides = Provides.objects.all()
     all_fields = [field.name for field in Provides._meta.get_fields()]
     # del all_fields[0:3]
     all_fields.append('Company')
     flag = True
-    return render(request, 'providesdata.html', {'provide': provides, 'column': all_fields, 'fl':flag})
+    return render(request, 'providesdata.html', {'provide': provides, 'column': all_fields, 'fl': flag})
 
 
 def searchcompany(request):
@@ -191,7 +196,8 @@ def searchbooking(request):
 def searchcustomer(request):
     if request.method == 'POST':
         search_id = request.POST.get('textfield', None)
-        filterfields = Q(firstname__icontains=search_id)| Q(lastname__icontains=search_id) |Q(mobile_id__icontains=search_id)
+        filterfields = Q(firstname__icontains=search_id) | Q(
+            lastname__icontains=search_id) | Q(mobile_id__icontains=search_id)
         searched = Customer.objects.filter(filterfields)
         all_fields = [field.name for field in Customer._meta.get_fields()]
         del all_fields[0]
@@ -215,9 +221,10 @@ def generateInvoice(request):
         print(num_of_invoices)
         for j in range(num_of_invoices):
             print(j)
-            new_inv = Invoice(Amount=amt, Discount=10,GST=18,Date_issued=i.Start_Date+relativedelta(years=j),Date_paid=date.today()+timedelta(4),Contract_id=i.Contract_id, issued_by_id=comp,issued_to_id=100000)
+            new_inv = Invoice(Amount=amt, Discount=10, GST=18, Date_issued=i.Start_Date+relativedelta(years=j),
+                              Date_paid=date.today()+timedelta(4), Contract_id=i.Contract_id, issued_by_id=comp, issued_to_id=100000)
             new_inv.save()
-    return render(request, 'geninvoice.html',{'fl':flag})
+    return render(request, 'geninvoice.html', {'fl': flag})
     # stdate = con.Start_Date
     # amt = con.Price
     # comp = con.Company_id
@@ -229,7 +236,7 @@ def generateInvoice(request):
     #     new_inv.save()
     # except:
     #     flag = False
-    
+
 # def generateInvoice(request):
 #     # cid = request.POST.get('textfield', None)
 #         objlist = Contracts.objects.filter(Type='R')
@@ -243,7 +250,3 @@ def generateInvoice(request):
 #             for j in range(num_of_invoices):
 #                 new_inv = Invoice(Amount=amt, Discount=10,GST=18,Date_issued=i.Start_Date+relativedelta(months=j),Date_paid=date.today()+timedelta(4),Contract_id=i.Contract_id, issued_by_id=100000,issued_to_id=comp)
 #                 new_inv.save()
-
-
-        
-
