@@ -21,4 +21,5 @@ urlpatterns = [
     path('home/service/search', views.searchservice, name='servicesearch'),
     path('home/provides', views.providesdata, name="provides"),
     path('otp', views.otp, name='otp'),
+    path('home/invoice/search', views.searchinvoice, name='invoiceserach'),
 ]
