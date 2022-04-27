@@ -131,8 +131,7 @@ class Booking(models.Model):
     in_time = models.DateTimeField()
     out_time = models.DateTimeField()
 
-    mobile = models.ForeignKey(Customer, on_delete=models.CASCADE, validators=[RegexValidator(
-        regex='^(\+91[\-\s]?)?[0]?(91)?[789]\d{9}$', message='should be a valid phone number', code='no match')])
+    mobile = models.ForeignKey(Customer, on_delete=models.CASCADE)
     
     Slot = models.ForeignKey(Slots, on_delete=models.CASCADE, default='def')
 
@@ -179,5 +178,5 @@ class ParkingReceipt(models.Model):
     Amount = models.FloatField()
     Date_of_issue = models.DateField()
     Booking = models.ForeignKey(Booking, on_delete=models.CASCADE, default='def')
-    mobile = models.ForeignKey(Customer, on_delete=models.CASCADE)
+    
     Slot = models.ForeignKey(Slots, on_delete=models.CASCADE, default='def')

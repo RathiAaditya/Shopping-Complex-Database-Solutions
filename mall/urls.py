@@ -29,6 +29,8 @@ urlpatterns = [
     re_path(r'form/insertSlot', views.Slotform, name='insertSlot'),
     re_path(r'form/insertService', views.Servicesform, name='insertService'),
     re_path(r'form/insertCustomer', views.Customerform, name='insertCustomer'),
+    path('home/receipt',views.receiptdata, name='receipt'),
+    path('home/genrecpt',views.generateBooking,name='genrecpt')
 
 
 ]

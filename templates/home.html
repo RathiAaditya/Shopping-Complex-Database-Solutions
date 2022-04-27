@@ -11,7 +11,7 @@
 
   </head>
   <body>
-    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <!-- <nav class="navbar navbar-expand-lg navbar-light bg-light">
       <div class="container-fluid">
         <a class="navbar-brand" href="#"></a>
       
@@ -26,8 +26,8 @@
           </form>
         </div>
       </div>
-    </nav>
-    <style>
+    </nav>-->
+    <style> 
       @import url("https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&display=swap");
 
 :root {
@@ -344,7 +344,7 @@ a {
 }
 .row{
   margin-left: 150px;
-  padding: 20px;
+  padding: 25px;
 }
 .height-0-bg-light{
   height: 40px;
@@ -352,6 +352,7 @@ a {
 .rowcont{
   padding: 15px;
   background-color: ghostwhite;
+  
 }
 
 .btns{
@@ -364,41 +365,32 @@ a {
   text-align: center;
   height: 150px;
   background-color: lightblue;
+  width: 280px;
+ 
 }
     </style>
-    <script>
+    <script> 
       document.addEventListener("DOMContentLoaded", function(event) {
 
-      const showNavbar = (toggleId, navId, bodyId, headerId) => {
+        const showNavbar = (toggleId, navId, bodyId, headerId) =>{
         const toggle = document.getElementById(toggleId),
-          nav = document.getElementById(navId),
-          bodypd = document.getElementById(bodyId),
-          headerpd = document.getElementById(headerId)
-
+        nav = document.getElementById(navId),
+        bodypd = document.getElementById(bodyId),
+        headerpd = document.getElementById(headerId)
+        
         // Validate that all variables exist
-        if (toggle && nav && bodypd && headerpd) {
-          toggle.addEventListener('click', () => {
-            // show navbar
-            nav.classList.toggle('show')
-            // change icon
-            toggle.classList.toggle('bx-x')
-            // add padding to body
-            bodypd.classList.toggle('body-pd')
-            // add padding to header
-            headerpd.classList.toggle('body-pd')
-          })
+        if(toggle && nav && bodypd && headerpd){
+        toggle.addEventListener('click', ()=>{
+        // show navbar
+        nav.classList.toggle('show')
+        // change icon
+        toggle.classList.toggle('bx-x')
+        // add padding to body
+        bodypd.classList.toggle('body-pd')
+        // add padding to header
+        headerpd.classList.toggle('body-pd')
+        })
         }
-      }
-
-      showNavbar('header-toggle', 'nav-bar', 'body-pd', 'header')
-
-      /*===== LINK ACTIVE =====*/
-      const linkColor = document.querySelectorAll('.nav_link')
-
-      function colorLink() {
-        if (linkColor) {
-          linkColor.forEach(l => l.classList.remove('active'))
-          this.classList.add('active')
         }
         
         showNavbar('header-toggle','nav-bar','body-pd','header')
@@ -422,6 +414,24 @@ a {
           <div class="header_toggle"> <i class='bx bx-menu' id="header-toggle"></i> </div>
           <h1>Agarwal Shopping Complex</h1>
           <div class="header_img"> <img src="static\babyyoda.jpg" alt=""> </div>
+          <div>
+            <nav class="navbar navbar-expand-lg navbar-light bg-light">
+              <div class="container-fluid">
+                <a class="navbar-brand" href="#"></a>
+  
+                <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                  <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+  
+                  </ul>
+                  <form class="d-flex" method="POST" action="/home/company/search">
+                    {% csrf_token %} 
+                    <input class="form-control me-2" type="search" placeholder="Search"  aria-label="Search" name="textfield">
+                    <button class="btn btn-outline-success" type="submit">Search </button>
+                  </form>
+                </div>
+              </div>
+            </nav>
+          </div>
       </header>
       <div class="l-navbar" id="nav-bar">
           <nav class="nav">
@@ -434,7 +444,7 @@ a {
                       <i class='bx bx-user nav_icon'></i> 
                       <span class="nav_name">Customer</span> </a>
                        <a href="home/company" class="nav_link">
-                          <i class=''></i> 
+                          <i class='bx bx-user nav_icon'></i> 
                           <span class="nav_name">Company</span> </a>
                            <a href="home/invoice" class="nav_link"> 
                              <i class='bx bx-message-square-detail nav_icon'></i> 
@@ -494,7 +504,7 @@ a {
             <p class="card-text"></p>
             <div class="btns">
             <a href="home/company" class="btn btn-primary">Company data </a>
-            <a href="home/form/insertCompany" class="btn btn-primary">Enter data </a>
+            <a href="form/insertCompany" class="btn btn-primary">Enter data </a>
           </div>
           </div>
         </div>
@@ -502,11 +512,11 @@ a {
       <div class="col-sm-3">
           <div class="card">
             <div class="card-body">
-              <h5 class="card-title">Invoice</h5>
+              <h5 class="card-title">Service</h5>
               <p class="card-text"></p>
               <div class="btns">
-                <a href="home/invoice" class="btn btn-primary">Invoice data </a>
-                
+                <a href="home/service" class="btn btn-primary">Service data </a>
+                <a href="home/form/insertService" class="btn btn-primary">Enter data </a>
               </div>
             </div>
           </div>
@@ -567,11 +577,11 @@ a {
           <div class="col-sm-3">
             <div class="card">
               <div class="card-body">
-                <h5 class="card-title">Service</h5>
+                <h5 class="card-title">Invoice</h5>
                 <p class="card-text"></p>
                 <div class="btns">
-                  <a href="home/service" class="btn btn-primary">Service data </a>
-                  <a href="home/form/insertService" class="btn btn-primary">Enter data </a>
+                  <a href="home/invoice" class="btn btn-primary">Invoice data </a>
+                  
                 </div>
               </div>
             </div>

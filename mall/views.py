@@ -9,7 +9,7 @@ from django.contrib import messages
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
 from django.db.models import Q
-from mall.models import Companies, Company_contact_no, Customer, Invoice, Contracts, AdminModel, Provides, Shops, Slots, Services, Booking
+from mall.models import Companies, Company_contact_no, Customer, Invoice, Contracts, AdminModel, ParkingReceipt, Provides, Shops, Slots, Services, Booking
 from mall.models import Booking, Companies, Customer, Invoice, Contracts, AdminModel, Services, Shops, Slots
 from django.shortcuts import render
 
@@ -74,7 +74,7 @@ def shopdata(request):
 def slotdata(request):
     slots = Slots.objects.all()
     all_fields = [field.name for field in Slots._meta.get_fields()]
-    del all_fields[0]
+    del all_fields[0:2]
     flag = True
     return render(request, 'slotdata.html', {'slot': slots, 'column': all_fields, 'fl': flag})
 
@@ -95,7 +95,8 @@ def companydata(request):
 def bookingdata(request):
     booking = Booking.objects.all()
     all_fields = [field.name for field in Booking._meta.get_fields()]
-
+    del all_fields[0]
+    all_fields[3] = 'First Name'
     flag = True
     return render(request, 'bookingdata.html', {'booking': booking, 'column': all_fields, 'fl': flag})
 
@@ -103,7 +104,7 @@ def bookingdata(request):
 def invoicedata(request):
     invoices = Invoice.objects.all()
     all_fields = [field.name for field in Invoice._meta.get_fields()]
-    del all_fields[0]
+    # del all_fields[0]
     del all_fields[2:4]
     flag = True
     all_fields.insert(2, 'TotalAmount')
@@ -199,11 +200,12 @@ def searchslot(request):
 def searchbooking(request):
     if request.method == 'POST':
         search_id = request.POST.get('textfield', None)
-        searched = Booking.objects.filter(Booking_id__startswith=search_id)
+        searched = Booking.objects.filter(Booking_id=search_id)
         filterfields = Q(Booking_id__icontains=search_id) | Q(
             mobile_id__istartswith=search_id) | Q(Slot__istartswith=search_id)
         all_fields = [field.name for field in Booking._meta.get_fields()]
-
+        del all_fields[0]
+        all_fields[3] = 'First Name'
         # del all_fields[0]
         flag = False
         return render(request, 'bookingdata.html', {'search': searched, 'column': all_fields, 'fl': flag})
@@ -223,6 +225,7 @@ def searchcustomer(request):
 
 
 def generateInvoice(request):
+    flg = False
     # cid = request.POST.get('textfield', None)
     objlist = Contracts.objects.filter(Type='T')
     flag = True
@@ -240,7 +243,7 @@ def generateInvoice(request):
             new_inv = Invoice(Amount=amt, Discount=10, GST=18, Date_issued=i.Start_Date+relativedelta(years=j),
                               Date_paid=date.today()+timedelta(4), Contract_id=i.Contract_id, issued_by_id=comp, issued_to_id=100000)
             new_inv.save()
-    return render(request, 'geninvoice.html', {'fl': flag})
+    return render(request, 'geninvoice.html', {'fl': flag, 'f':flg})
     # stdate = con.Start_Date
     # amt = con.Price
     # comp = con.Company_id
@@ -278,24 +281,51 @@ def generateInvoice(request):
     # return render(request, 'geninvoice.html')
 
 
+def generateBooking(request):
+    flg = True
+    flag = True
+    receipts = Booking.objects.all()
+    for i in receipts:
+        amt = i.Slot.Rate
+        dati = i.in_time.date()
+        bid = i.Booking_id
+        slid = i.Slot_id
+        new_rept = ParkingReceipt(Amount=amt, Date_of_issue = dati, Booking_id=bid, Slot_id=slid)
+        new_rept.save()
+    return render(request, 'geninvoice.html',{'f':flg, 'fl':flag})
+
+def receiptdata(request):
+    recpts = ParkingReceipt.objects.all()
+    all_fields = [field.name for field in ParkingReceipt._meta.get_fields()]
+    all_fields.append('First Name')
+    #del all_fields[0]
+    flag = True
+    return render(request, 'receiptdata.html', {'recpt': recpts, 'column': all_fields, 'fl': flag})
+
+
+
+
+
+
+
 def Companyform(request):
     if request.method == "POST":
-        com_form = CompanyForm(request.POST)
-        cont_form = CompanyContactFrom(request.POST)
-        if com_form.is_valid():
-            a = com_form.save()
-            b = cont_form.save(commit=False)
+        form01 = CompanyForm(request.POST)
+        form02 = CompanyContactFrom(request.POST)
+        if form01.is_valid():
+            a = form01.save()
+            b = form02.save(commit=False)
             print("saved")
-            if cont_form.is_valid():
-                b = cont_form.save(commit=False)
+            if form02.is_valid():
+                b = form02.save(commit=False)
                 b.Company = a
                 b.save()
-                cont_form.save_m2m()
+                form02.save_m2m()
                 return redirect('/')
     else:
-        com_form = CompanyForm()
-        cont_form = CompanyContactFrom()
-    context = {'com_form': com_form, 'cont_form': cont_form, }
+        form01 = CompanyForm()
+        form02 = CompanyContactFrom()
+    context = {'form01': form01, 'form02': form02, }
     return render(request, 'companyinput.html', context)
 
 
