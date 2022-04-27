@@ -122,7 +122,7 @@ def searchinvoice(request):
         for u in updated_search_id:
             filterfields = filterfields | Q(issued_by_id=u) | Q(issued_to_id=u)
         print(len(filterfields))
-        filflag=False
+        filflag = False
         if(len(filterfields) == 0):
             filflag = True
         searched = Invoice.objects.filter(filterfields)
@@ -371,7 +371,7 @@ def Slotform(request):
             a = form4.save()
             return redirect('/form/insertSlot')
     else:
-        form4 = ShopForm()
+        form4 = SlotForm()
     context3 = {'form4': form4}
     return render(request, 'slotinput.html', context3)
 
