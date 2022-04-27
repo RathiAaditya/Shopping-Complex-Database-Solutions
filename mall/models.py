@@ -6,7 +6,7 @@ from tkinter import CASCADE
 from xmlrpc.client import boolean
 from django.db import models
 from django.core.validators import RegexValidator
-from django.db.models import F
+from django.db.models import F,UniqueConstraint
 # Create your models here.
 
 
@@ -28,13 +28,10 @@ class Companies(models.Model):
 
 
 class Company_contact_no(models.Model):
-    Contact_no = models.CharField(validators=[RegexValidator(
-        regex='^(\+91[\-\s]?)?[0]?(91)?[789]\d{9}$', message='should be a valid phone number', code='no match')], max_length=12)
-
-    Company = models.ForeignKey(
-        Companies, on_delete=models.CASCADE, default='def')
-
-    class Meta:
+    
+    Contact_no = models.CharField(validators=[RegexValidator(regex='^(\+91[\-\s]?)?[0]?(91)?[789]\d{9}$', message='should be a valid phone number', code='no match')], max_length=12)
+    Company = models.ForeignKey(Companies, on_delete=models.CASCADE,default='def')
+    class Meta: 
         unique_together = (("Contact_no", "Company_id"),)
 
 
@@ -61,6 +58,7 @@ class Contracts(models.Model):
     Type_choices = [
         ('S', 'Selling'),
         ('R', 'Renting'),
+        ('T', 'Services')
     ]
     Contract_id = models.CharField(max_length=40, primary_key=True)
     Type = models.CharField(max_length=1, choices=Type_choices, default='R')
@@ -79,19 +77,15 @@ class Contracts(models.Model):
 
 
 class Invoice(models.Model):
-    Invoice_id = models.CharField(max_length=50, primary_key=True)
+    Invoice_id = models.AutoField(primary_key=True)
     Amount = models.FloatField()
     Discount = models.FloatField()
     GST = models.FloatField()
     Date_issued = models.DateTimeField()
-    Date_paid = models.DateTimeField()
-    Contract = models.ForeignKey(
-        Contracts, on_delete=models.CASCADE, default='def')
-    issued_by = models.ForeignKey(
-        Companies, on_delete=models.CASCADE, related_name='company_issuing', default='def')
-    issued_to = models.ForeignKey(
-        Companies, on_delete=models.CASCADE, related_name='company_issued', default='def')
-
+    Date_paid = models.DateTimeField(blank=True)
+    Contract = models.ForeignKey(Contracts,on_delete=models.CASCADE,default='def')
+    issued_by = models.ForeignKey(Companies,on_delete=models.CASCADE, related_name='company_issuing',default='def')
+    issued_to = models.ForeignKey(Companies,on_delete=models.CASCADE, related_name='company_issued',default='def')
     class Meta:
         verbose_name_plural = "Invoices"
 
@@ -140,7 +134,7 @@ class Booking(models.Model):
 
 
 class Services(models.Model):
-    Service_id = models.CharField(primary_key=True, max_length=40)
+    Service_id = models.IntegerField(primary_key=True)
     Type = models.CharField(max_length=30)
 
     class Meta:

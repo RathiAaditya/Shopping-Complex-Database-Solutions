@@ -19,4 +19,5 @@ urlpatterns = [
     path('home/booking/search', views.searchbooking, name='bookingsearch'),
     path('home/service', views.servicedata, name='servicedata'),
     path('home/service/search', views.searchservice, name='servicesearch'),
+    path('home/provides', views.providesdata, name="provides")
 ]

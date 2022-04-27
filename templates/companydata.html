@@ -509,11 +509,14 @@ a {
             </tr>
           </thead>
           <tbody>
-            {% for comp in company %}
+            {% for comp,con in zip %}
             <tr>
               <td>{{comp.Company_id}}</td>
               <td>{{comp.name}}</td>
               <td>{{comp.email}}</td>
+              
+              <td> {% for c in con %} {{c.Contact_no}}  {% endfor %}</td>
+             
             </tr>
             {% endfor %}
           </tbody>
@@ -549,7 +552,7 @@ a {
       <h1>Use this form to search by name</h1>
       <form method="POST" action="/home/company/search">
         {% csrf_token %}
-        <input type="text" name="textfield" style="margin-top: 0px margin-left:700px" />
+        <input type="text" name="textfield" style="margin-top: 0px margin-left: 700px" />
 
         <button type="submit">Search</button>
       </form>

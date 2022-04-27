@@ -7,7 +7,14 @@
     <title>Document</title>
 </head>
 <body>
+    {% if fl %}
     <h1>Invoice generated successfully!</h1>
-    <a href="invoice">Check invoices</a>
+    <a href="home/invoice"><h1>Check invoices</h1></a>
+    {% else %}
+    <h1>Oops....</h1><br><br>
+    <h1>This contract doesn't exist!</h1><br><br>
+    <h1>Please check the contract id</h1><br><br>
+    <a href="home/contract"><h1>Back to contracts</h1></a>
+    {% endif %}
 </body>
 </html>

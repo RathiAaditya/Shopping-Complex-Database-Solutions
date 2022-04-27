@@ -440,7 +440,7 @@ a {
       #wrapper {
         font-size:75%;
         display: block;
-        width: 1500px;
+        width: 900px;
         background: #fff;
         margin: 0 auto;
         padding: 10px 17px;
@@ -496,78 +496,71 @@ a {
   <body>
     <body>
       <div id="wrapper">
-        <h1>Contracts</h1>
-
+        <h1>Provides</h1>
+        {% if fl %}
         <table id="keywords" cellspacing="0" cellpadding="0">
           <thead>
             <tr>
               {% for item in column %}
-
               <th><span>{{item}}</span></th>
-
               {% endfor %}
             </tr>
-           </thead>
-           <tbody>
-             {% for cont in contract %}
-             <tr>
-                 <td>{{cont.Contract_id}}</td>
-                 <td>{{cont.Type}}</td> 
-                 <td>{{cont.Price}}</td> 
-                 <td>{{cont.Start_Date}}</td> 
-                 <td>{{cont.End_Date}}</td> 
-                 <td>{{cont.Signing_Date}}</td> 
-                 <td>{{cont.Billing_Frequency}}</td> 
-                 <td>{{cont.Company.name}}</td> 
+          </thead>
+          <tbody>
+            {% for prov in provide %}
+            <tr>
+              <td>{{prov.Contract_id}}</td>
+              <td>{{prov.Service_id}}</td>
+              <td>{{prov.Contract.Company.name}}</td>
+              <!-- <td>{{cust.lastname}}</td>
+              <td>{{cust.Vaccination_Status}}</td>
+              <td>{{cust.Vehicle_id}}</td> -->
             </tr>
             {% endfor %}
           </tbody>
         </table>
-
-        <!-- <table id="keywords" cellspacing="0" cellpadding="0">
+        {% else %}
+        <table id="keywords" cellspacing="0" cellpadding="0">
           <thead>
-           <tr>
-              {% for item in column %} 
-            
+            <tr>
+              {% for item in column %}
               <th><span>{{item}}</span></th>
-
-           
-            {% endfor %}
-           </tr>
+              {% endfor %}
+            </tr>
           </thead>
           <tbody>
             {% for sr in search %}
-            <tr>                                   
-                <td>{{sr.Company_id}}</td>         
-                <td>{{sr.name}}</td> 
-                <td>{{sr.email}}</td> 
-           </tr>
-            {% endfor %} 
+            <tr>
+              <td>{{sr.mobile_id}}</td>
+              <td>{{sr.firstname}}</td>
+              <td>{{sr.lastname}}</td>
+              <td>{{sr.Vaccination_Status}}</td>
+              <td>{{sr.Vehicle_id}}</td>
+            </tr>
+            {% endfor %}
           </tbody>
         </table>
-         -->
+        {% endif %}
       </div>
-      <!-- {% if not fl %} 
-        <a href="/company" style="margin-left: 600px;"><h1>View All</h1></a>
-        {% endif %}  -->
-        <a href="/home"><h1>Home</h1></a><br><br>
-        <h1>Use this form to enter cid for invoice</h1>
-        <form method="POST" action="/geninvoice">
-          {% csrf_token %}
-          <input type="text" name="textfield" style="margin-left: 700px;">
-          
-          <button type="submit">Generate Invoice</button>
-          </form>
+      {% if not fl %}
+      <a href="/home/customer" style="margin-left: 600px"><h1>View All</h1></a>
+      {% endif %}
+      <div>
+        <a href="/home"><h1>Home</h1></a>
+      </div>
+      <h1>Use this form to search by name</h1>
+      <form method="POST" action="/home/customer/search">
+        {% csrf_token %}
+        <input type="text" name="textfield" style="margin-left: 700px" />
 
-        
-       </body>
-       
-</body>
+        <button type="submit">Search</button>
+      </form>
+    </body>
+  </body>
 
-<script>
-    $(function(){
-        $('#keywords').tablesorter(); 
-      });
-</script>
-
+  <script>
+    $(function () {
+      $("#keywords").tablesorter();
+    });
+  </script>
 </html>

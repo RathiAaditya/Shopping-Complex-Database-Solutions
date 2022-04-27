@@ -1,12 +1,14 @@
 from asyncio.windows_events import NULL
 from urllib import response
 from django.http import HttpResponse
-from datetime import date
+from datetime import date, timedelta
+from dateutil.relativedelta import relativedelta
 from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.contrib.auth.models import User
-from django.contrib.auth import authenticate, login, logout
-from mall.models import Booking, Companies, Customer, Invoice, Contracts, AdminModel, Services, Shops, Slots
+from django.contrib.auth import authenticate,login,logout
+from django.db.models import Q
+from mall.models import Companies, Company_contact_no, Customer, Invoice, Contracts, AdminModel, Provides,Shops,Slots,Services,Booking
 
 # Create your views here.
 
@@ -67,10 +69,15 @@ def slotdata(request):
 
 def companydata(request):
     companies = Companies.objects.all()
+    l = []
+    for i in companies:
+        l.append(Company_contact_no.objects.filter(Company_id = i.Company_id))
+    zipped_data = zip(companies, l)
     all_fields = [field.name for field in Companies._meta.get_fields()]
     del all_fields[0:4]
+    all_fields.append('Contact_nos')
     flag = True
-    return render(request, 'companydata.html', {'company': companies, 'column': all_fields, 'fl': flag})
+    return render(request, 'companydata.html', {'zip': zipped_data, 'column': all_fields, 'fl': flag})
 
 
 def bookingdata(request):
@@ -87,7 +94,7 @@ def invoicedata(request):
     del all_fields[0]
     del all_fields[2:4]
 
-    all_fields.insert(4, 'TotalAmount')
+    all_fields.insert(2, 'TotalAmount')
     return render(request, 'invoicedata.html', {'invoice': invoices, 'column': all_fields, 'Invoices': Invoice})
 
 
@@ -96,6 +103,14 @@ def contractdata(request):
     all_fields = [field.name for field in Contracts._meta.get_fields()]
     del all_fields[0:3]
     return render(request, 'contractdata.html', {'contract': contracts, 'column': all_fields})
+
+def providesdata(request):
+    provides = Provides.objects.all()
+    all_fields = [field.name for field in Provides._meta.get_fields()]
+    # del all_fields[0:3]
+    all_fields.append('Company')
+    flag = True
+    return render(request, 'providesdata.html', {'provide': provides, 'column': all_fields, 'fl':flag})
 
 
 def searchcompany(request):
@@ -151,7 +166,8 @@ def searchbooking(request):
 def searchcustomer(request):
     if request.method == 'POST':
         search_id = request.POST.get('textfield', None)
-        searched = Customer.objects.filter(firstname__icontains=search_id)
+        filterfields = Q(firstname__icontains=search_id)| Q(lastname__icontains=search_id) |Q(mobile_id__icontains=search_id)
+        searched = Customer.objects.filter(filterfields)
         all_fields = [field.name for field in Customer._meta.get_fields()]
         del all_fields[0]
 
@@ -160,13 +176,49 @@ def searchcustomer(request):
 
 
 def generateInvoice(request):
-    cid = request.POST.get('textfield', None)
-    con = Contracts.objects.get(Contract_id=cid)
-    stdate = con.Start_Date
-    amt = con.Price
-    comp = con.Company_id
-    bil_freq = con.Billing_Frequency
-    new_inv = Invoice(Invoice_id=150001, Amount=amt, Discount=10, GST=18, Date_issued=date.today(
-    ), Date_paid=date.today(), Contract_id=cid, issued_by_id=12000110, issued_to_id=comp)
-    new_inv.save()
-    return render(request, 'geninvoice.html')
+    # cid = request.POST.get('textfield', None)
+    objlist = Contracts.objects.filter(Type='T')
+    flag = True
+    for i in objlist:
+        print(i.Contract_id)
+        no_of_years = relativedelta(i.End_Date, i.Start_Date).years
+        print(no_of_years)
+        amt = i.Price
+        comp = i.Company_id
+        bil_freq = i.Billing_Frequency
+        num_of_invoices = int(no_of_years / bil_freq)
+        print(num_of_invoices)
+        for j in range(num_of_invoices):
+            print(j)
+            new_inv = Invoice(Amount=amt, Discount=10,GST=18,Date_issued=i.Start_Date+relativedelta(years=j),Date_paid=date.today()+timedelta(4),Contract_id=i.Contract_id, issued_by_id=comp,issued_to_id=100000)
+            new_inv.save()
+    return render(request, 'geninvoice.html',{'fl':flag})
+    # stdate = con.Start_Date
+    # amt = con.Price
+    # comp = con.Company_id
+    # bil_freq = con.Billing_Frequency
+    # no_of_days = (date.today() - stdate.date()).days
+    # num_of_invoices = int(no_of_days / bil_freq)
+    # for i in range(num_of_invoices):
+    #     new_inv = Invoice(Amount=amt, Discount=10,GST=18,Date_issued=stdate+timedelta(i*bil_freq),Date_paid=date.today()+timedelta(4),Contract_id=cid, issued_by_id=12000110,issued_to_id=comp)
+    #     new_inv.save()
+    # except:
+    #     flag = False
+    
+# def generateInvoice(request):
+#     # cid = request.POST.get('textfield', None)
+#         objlist = Contracts.objects.filter(Type='R')
+#         flag = True
+#         for i in objlist:
+#             no_of_months = relativedelta(i.End_Date, i.Start_Date).years*12
+#             amt = i.Price
+#             comp = i.Company_id
+#             bil_freq = i.Billing_Frequency
+#             num_of_invoices = int(no_of_months/ bil_freq)
+#             for j in range(num_of_invoices):
+#                 new_inv = Invoice(Amount=amt, Discount=10,GST=18,Date_issued=i.Start_Date+relativedelta(months=j),Date_paid=date.today()+timedelta(4),Contract_id=i.Contract_id, issued_by_id=100000,issued_to_id=comp)
+#                 new_inv.save()
+
+
+        
+
