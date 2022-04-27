@@ -82,7 +82,7 @@ DATABASES = {
 
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'shoppingmall',
+        'NAME': 'shoppingmall2',
         'USER': 'postgres',
         'PASSWORD': 'sankalp02',
         'HOST': 'localhost',
