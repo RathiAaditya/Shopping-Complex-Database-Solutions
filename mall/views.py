@@ -1,5 +1,6 @@
 from asyncio.windows_events import NULL
 from urllib import response
+from django import forms
 from django.http import HttpResponse
 from datetime import date, timedelta
 from dateutil.relativedelta import relativedelta
@@ -9,6 +10,13 @@ from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
 from django.db.models import Q
 from mall.models import Companies, Company_contact_no, Customer, Invoice, Contracts, AdminModel, Provides, Shops, Slots, Services, Booking
+from mall.models import Booking, Companies, Customer, Invoice, Contracts, AdminModel, Services, Shops, Slots
+from django.shortcuts import render
+
+from mall.models import Companies, Customer, Invoice, Contracts
+from .forms import CompanyForm, CompanyContactFrom, CustomerForm, ContractForm, ServicesForm, ProvidesForm
+#import forms
+
 
 # Create your views here.
 
@@ -112,13 +120,16 @@ def searchinvoice(request):
         filterfields = Q()
         for u in updated_search_id:
             filterfields = filterfields | Q(issued_by_id=u) | Q(issued_to_id=u)
+        print(len(filterfields))
+        if(len(filterfields) == 0):
+            filflag = True
         searched = Invoice.objects.filter(filterfields)
         all_fields = [field.name for field in Invoice._meta.get_fields()]
         del all_fields[0]
         del all_fields[2:4]
         all_fields.insert(2, 'TotalAmount')
         flag = False
-        return render(request, 'invoicedata.html', {'search': searched, 'column': all_fields, 'fl': flag})
+        return render(request, 'invoicedata.html', {'search': searched, 'column': all_fields, 'fl': flag, 'ffl': filflag})
 
 
 def contractdata(request):
@@ -141,10 +152,13 @@ def searchcompany(request):
     if request.method == 'POST':
         search_id = request.POST.get('textfield', None)
         searched = Companies.objects.filter(name__icontains=search_id)
+        if(len(searched) == 0):
+            filflag = True
+            return render(request, 'companydata.html', {'ffl': filflag})
         all_fields = [field.name for field in Companies._meta.get_fields()]
         del all_fields[0:4]
         flag = False
-        return render(request, 'companydata.html', {'search': searched, 'column': all_fields, 'fl': flag})
+        return render(request, 'companydata.html', {'search': searched, 'column': all_fields, 'fl': flag, 'ffl': filflag})
 
 
 def searchshop(request):
@@ -244,3 +258,57 @@ def generateInvoice(request):
 #             for j in range(num_of_invoices):
 #                 new_inv = Invoice(Amount=amt, Discount=10,GST=18,Date_issued=i.Start_Date+relativedelta(months=j),Date_paid=date.today()+timedelta(4),Contract_id=i.Contract_id, issued_by_id=100000,issued_to_id=comp)
 #                 new_inv.save()
+    cid = request.POST.get('textfield', None)
+    con = Contracts.objects.get(Contract_id=cid)
+    stdate = con.Start_Date
+    amt = con.Price
+    comp = con.Company_id
+    bil_freq = con.Billing_Frequency
+    new_inv = Invoice(Invoice_id=150001, Amount=amt, Discount=10, GST=18, Date_issued=date.today(
+    ), Date_paid=date.today(), Contract_id=cid, issued_by_id=12000110, issued_to_id=comp)
+    new_inv.save()
+    return render(request, 'geninvoice.html')
+
+
+def Companyform(request):
+    if request.method == "POST":
+        com_form = CompanyForm(request.POST)
+        cont_form = CompanyContactFrom(request.POST)
+        if com_form.is_valid():
+            a = com_form.save()
+            b = cont_form.save(commit=False)
+            print("saved")
+            if cont_form.is_valid():
+                b = cont_form.save(commit=False)
+                b.Company = a
+                b.save()
+                cont_form.save_m2m()
+                return redirect('/')
+    else:
+        com_form = CompanyForm()
+        cont_form = CompanyContactFrom()
+    context = {'com_form': com_form, 'cont_form': cont_form, }
+    return render(request, 'companyinput.html', context)
+
+
+def Contractform(request):
+    if request.method == "POST":
+        form1 = ContractForm(request.POST)
+        form2 = ProvidesForm(request.POST)
+        print("saved")
+        if form1.is_valid():
+            a = form1.save()
+            b = form2.save(commit=False)
+            print("saved")
+            if form2.is_valid() and a.Type == "T":
+                b = form2.save(commit=False)
+                b.Contract = a
+                b.save()
+                form2.save_m2m()
+                return redirect('/form/insertContract')
+            return redirect('/form/insertContract')
+    else:
+        form1 = ContractForm()
+        form2 = ProvidesForm()
+    context1 = {'form1': form1, 'form2': form2, }
+    return render(request, 'contractinput.html', context1)

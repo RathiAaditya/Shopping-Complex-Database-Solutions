@@ -243,14 +243,15 @@ a {
           <nav class="navbar navbar-expand-lg navbar-light bg-light">
             <div class="container-fluid">
               <a class="navbar-brand" href="#"></a>
-            
+
               <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                      
+
                 </ul>
-                <form class="d-flex">
-                  <input class="form-control me-2" type="search" placeholder="Search  action="/home/company/search" aria-label="Search">
-                  <button class="btn btn-outline-success" type="submit" action="/home/company/search">Search </button>
+                <form class="d-flex" method="POST" action="/home/company/search">
+                  {% csrf_token %} 
+                  <input class="form-control me-2" type="search" placeholder="Search"  aria-label="Search" name="textfield">
+                  <button class="btn btn-outline-success" type="submit">Search </button>
                 </form>
               </div>
             </div>
@@ -264,28 +265,28 @@ a {
                    <span class="nav_name">Home</span>
                  </a>
                   <div class="nav_list"> 
-                    <a href="customer" class="nav_link "> 
+                    <a href="/home/customer" class="nav_link "> 
                       <i class='bx bx-grid-alt nav_icon'></i> 
                       <span class="nav_name">Customer</span> </a>
-                       <a href="company" class="nav_link">
+                       <a href="/home/company" class="nav_link">
                           <i class='bx bx-user nav_icon'></i> 
                           <span class="nav_name">Company</span> </a>
-                           <a href="  invoice" class="nav_link"> 
+                           <a href="/home/invoice" class="nav_link"> 
                              <i class='bx bx-message-square-detail nav_icon'></i> 
                              <span class="nav_name">Invoice</span> </a>
-                              <a href="contract" class="nav_link"> 
+                              <a href="/home/contract" class="nav_link"> 
                                 <i class='bx bx-bookmark nav_icon'></i>
                                  <span class="nav_name">Contract</span> </a> 
-                                 <a href="shop" class="nav_link">
+                                 <a href="/home/shop" class="nav_link">
                                     <i class='bx bx-folder nav_icon'></i> 
                                     <span class="nav_name">Shop</span> </a>
-                                     <a href="slot" class="nav_link"> 
+                                     <a href="/home/slot" class="nav_link"> 
                                        <i class='bx bx-bar-chart-alt-2 nav_icon'></i> 
                                        <span class="nav_name">Slot</span> </a>
-                                       <a href="booking" class="nav_link"> 
+                                       <a href="/home/booking" class="nav_link"> 
                                          <i class='bx bx-bar-chart-alt-2 nav_icon'></i> 
                                        <span class="nav_name">Booking</span> </a> </div>
-                                     <a href="service" class="nav_link"> 
+                                     <a href="/home/service" class="nav_link"> 
                                        <i class='bx bx-bar-chart-alt-2 nav_icon'></i> 
                                        <span class="nav_name">Service</span> </a> </div>
                                      <a href="/" class="nav_link"> 
@@ -327,7 +328,7 @@ a {
       iframe,
       h1,
       h2,
-      h3,
+      
       h4,
       h5,
       h6,
@@ -539,6 +540,13 @@ a {
           </tbody>
         </table>
         {% else %}
+        {% if ffl %}
+        <table id="keywords" cellspacing="0" cellpadding="0">
+          <tbody>
+           <h3 style="margin-left: 260px;">No search values returned.</h3>
+          </tbody>
+        </table>
+        {% endif %}
         <table id="keywords" cellspacing="0" cellpadding="0">
           <thead>
             <tr>
