@@ -14,7 +14,7 @@ from mall.models import Booking, Companies, Customer, Invoice, Contracts, AdminM
 from django.shortcuts import render
 
 from mall.models import Companies, Customer, Invoice, Contracts
-from .forms import CompanyForm, CompanyContactFrom, CustomerForm, ContractForm, ServicesForm, ProvidesForm
+from .forms import CompanyForm, CompanyContactFrom, CustomerForm, ContractForm, ServicesForm, ProvidesForm, ShopForm, SlotForm
 #import forms
 
 
@@ -107,7 +107,8 @@ def invoicedata(request):
     del all_fields[2:4]
     flag = True
     all_fields.insert(2, 'TotalAmount')
-    return render(request, 'invoicedata.html', {'invoice': invoices, 'column': all_fields, 'Invoices': Invoice, 'fl':flag})
+    return render(request, 'invoicedata.html', {'invoice': invoices, 'column': all_fields, 'Invoices': Invoice, 'fl': flag})
+
 
 def searchinvoice(request):
     if request.method == 'POST':
@@ -116,21 +117,21 @@ def searchinvoice(request):
         updated_search_id = []
         for i in temp:
             updated_search_id.append(i.Company_id)
-        print(updated_search_id)
         filterfields = Q()
         for u in updated_search_id:
             filterfields = filterfields | Q(issued_by_id=u) | Q(issued_to_id=u)
         print(len(filterfields))
-        if(len(filterfields)==0):
+        filflag=False
+        if(len(filterfields) == 0):
             filflag = True
         searched = Invoice.objects.filter(filterfields)
-        print(searched)
         all_fields = [field.name for field in Invoice._meta.get_fields()]
         del all_fields[0]
         del all_fields[2:4]
         all_fields.insert(2, 'TotalAmount')
         flag = False
-        return render(request, 'invoicedata.html', {'search': searched, 'column': all_fields, 'fl': flag, 'ffl':filflag})
+        return render(request, 'invoicedata.html', {'search': searched, 'column': all_fields, 'fl': flag, 'ffl': filflag})
+
 
 def contractdata(request):
     contracts = Contracts.objects.all()
@@ -155,17 +156,20 @@ def searchcompany(request):
         filflag = False
         if(len(searched)==0):
             filflag = True
-            return render(request, 'companydata.html', {'ffl':filflag})
+            return render(request, 'companydata.html', {'ffl': filflag})
         all_fields = [field.name for field in Companies._meta.get_fields()]
         del all_fields[0:4]
         flag = False
-        return render(request, 'companydata.html', {'search': searched, 'column': all_fields, 'fl': flag, 'ffl':filflag})
+        return render(request, 'companydata.html', {'search': searched, 'column': all_fields, 'fl': flag, 'ffl': filflag})
 
 
 def searchshop(request):
     if request.method == 'POST':
         search_id = request.POST.get('textfield', None)
-        searched = Shops.objects.filter(Shop_id__startswith=search_id)
+
+        filterfields = Q(Shop_id__iexact=search_id) | Q(
+            Status__icontains=search_id)
+        searched = Shops.objects.filter(filterfields)
         all_fields = [field.name for field in Shops._meta.get_fields()]
         del all_fields[0]
         flag = False
@@ -196,7 +200,10 @@ def searchbooking(request):
     if request.method == 'POST':
         search_id = request.POST.get('textfield', None)
         searched = Booking.objects.filter(Booking_id__startswith=search_id)
+        filterfields = Q(Booking_id__icontains=search_id) | Q(
+            mobile_id__istartswith=search_id) | Q(Slot__istartswith=search_id)
         all_fields = [field.name for field in Booking._meta.get_fields()]
+
         # del all_fields[0]
         flag = False
         return render(request, 'bookingdata.html', {'search': searched, 'column': all_fields, 'fl': flag})
@@ -259,16 +266,16 @@ def generateInvoice(request):
 #             for j in range(num_of_invoices):
 #                 new_inv = Invoice(Amount=amt, Discount=10,GST=18,Date_issued=i.Start_Date+relativedelta(months=j),Date_paid=date.today()+timedelta(4),Contract_id=i.Contract_id, issued_by_id=100000,issued_to_id=comp)
 #                 new_inv.save()
-    cid = request.POST.get('textfield', None)
-    con = Contracts.objects.get(Contract_id=cid)
-    stdate = con.Start_Date
-    amt = con.Price
-    comp = con.Company_id
-    bil_freq = con.Billing_Frequency
-    new_inv = Invoice(Invoice_id=150001, Amount=amt, Discount=10, GST=18, Date_issued=date.today(
-    ), Date_paid=date.today(), Contract_id=cid, issued_by_id=12000110, issued_to_id=comp)
-    new_inv.save()
-    return render(request, 'geninvoice.html')
+    # cid = request.POST.get('textfield', None)
+    # con = Contracts.objects.get(Contract_id=cid)
+    # stdate = con.Start_Date
+    # amt = con.Price
+    # comp = con.Company_id
+    # bil_freq = con.Billing_Frequency
+    # new_inv = Invoice(Invoice_id=150001, Amount=amt, Discount=10, GST=18, Date_issued=date.today(
+    # ), Date_paid=date.today(), Contract_id=cid, issued_by_id=12000110, issued_to_id=comp)
+    # new_inv.save()
+    # return render(request, 'geninvoice.html')
 
 
 def Companyform(request):
@@ -306,10 +313,58 @@ def Contractform(request):
                 b.Contract = a
                 b.save()
                 form2.save_m2m()
-                return redirect('/form/insertContract')
-            return redirect('/form/insertContract')
+                return redirect('home/form/insertContract')
+            return redirect('home/form/insertContract')
     else:
         form1 = ContractForm()
         form2 = ProvidesForm()
     context1 = {'form1': form1, 'form2': form2, }
     return render(request, 'contractinput.html', context1)
+
+
+def Shopform(request):
+    if request.method == "POST":
+        form3 = ShopForm(request.POST)
+        if form3.is_valid():
+            a = form3.save()
+            return redirect('/form/insertShop')
+    else:
+        form3 = ShopForm()
+    context2 = {'form3': form3}
+    return render(request, 'shopinput.html', context2)
+
+
+def Slotform(request):
+    if request.method == "POST":
+        form4 = SlotForm(request.POST)
+        if form4.is_valid():
+            a = form4.save()
+            return redirect('/form/insertSlot')
+    else:
+        form4 = ShopForm()
+    context3 = {'form4': form4}
+    return render(request, 'slotinput.html', context3)
+
+
+def Servicesform(request):
+    if request.method == "POST":
+        form5 = ServicesForm(request.POST)
+        if form5.is_valid():
+            a = form5.save()
+            return redirect('/form/insertServices')
+    else:
+        form5 = ServicesForm()
+    context4 = {'form5': form5}
+    return render(request, 'servicesinput.html', context4)
+
+
+def Customerform(request):
+    if request.method == "POST":
+        form6 = CustomerForm(request.POST)
+        if form6.is_valid():
+            a = form6.save()
+            return redirect('/form/insertCustomer')
+    else:
+        form6 = CustomerForm()
+    context5 = {'form6': form6}
+    return render(request, 'customerinput.html', context5)

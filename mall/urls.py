@@ -25,4 +25,10 @@ urlpatterns = [
     path('home/invoice/search', views.searchinvoice, name='invoiceserach'),
     re_path(r'form/insertCompany', views.Companyform, name='insertCompany'),
     re_path(r'form/insertContract', views.Contractform, name='insertContract'),
+    re_path(r'form/insertShop', views.Shopform, name='insertShop'),
+    re_path(r'form/insertSlot', views.Slotform, name='insertSlot'),
+    re_path(r'form/insertService', views.Servicesform, name='insertService'),
+    re_path(r'form/insertCustomer', views.Customerform, name='insertCustomer'),
+
+
 ]

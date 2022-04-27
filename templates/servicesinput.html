@@ -244,7 +244,6 @@
     <body id="body-pd">
         <header class="header" id="header">
             <div class="header_toggle"> <i class='bx bx-menu' id="header-toggle"></i> </div>
-            <h1>Agarwal Shopping Complex</h1>
             <div class="header_img"> <img src="static\babyyoda.jpg" alt=""> </div>
         </header>
         <div class="l-navbar" id="nav-bar">
@@ -550,57 +549,14 @@
         <form method="POST" action="">
             <fieldset style="padding: 1px; margin-top: 20px;">
                 {% csrf_token %}
-                <legend>Contract Form</legend>
+                <legend>Customer Form</legend>
                 <div class="container">
-                    <div class="row">
-                        <div class="col">
-                            {{form1.Contract_id | as_crispy_field}}
+                    <div>
+                        <div class="row">
+                            {{form5.Service_id | as_crispy_field}}
                         </div>
-                        <div class="col">
-                            {{form1.Company| as_crispy_field}}
-                        </div>
-                        <div class="col">
-                            {{form1.Type | as_crispy_field}}
-                        </div>
-                    </div>
-                    <div class="row" style="padding: 1px; margin-top: 20px;">
-                        <div class="col">
-                            <div class="input-group date" id="datetimepicker1" data-target-input="nearest">
-                                {{ form1.Start_Date | as_crispy_field}}
-                                <div class="input-group-append" data-target="#datetimepicker1"
-                                    data-toggle="datetimepicker">
-                                    <div class="input-group-text"><i class="fa fa-calendar"></i></div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col">
-                            <div class="input-group date" id="datetimepicker2" data-target-input="nearest">
-                                {{ form1.End_Date | as_crispy_field}}
-                                <div class="input-group-append" data-target="#datetimepicker2"
-                                    data-toggle="datetimepicker">
-                                    <div class="input-group-text"><i class="fa fa-calendar"></i></div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col">
-                            <div class="input-group date" id="datetimepicker3" data-target-input="nearest">
-                                {{ form1.Signing_Date | as_crispy_field}}
-                                <div class="input-group-append" data-target="#datetimepicker3"
-                                    data-toggle="datetimepicker">
-                                    <div class="input-group-text"><i class="fa fa-calendar"></i></div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row" style="padding: 1px; margin-top: 20px;">
-                        <div class="col">
-                            {{form1.Price | as_crispy_field}}
-                        </div>
-                        <div class="col">
-                            {{form1.Billing_Frequency | as_crispy_field}}
-                        </div>
-                        <div class="col">
-                            {{form2.Service | as_crispy_field}}
+                        <div class="row">
+                            {{form5.Type | as_crispy_field}}
                         </div>
                     </div>
                 </div>
@@ -618,17 +574,6 @@
             color: red;
         }
     </style>
-    <script>
-        $(function () {
-            $("#datetimepicker1").datetimepicker({ format: 'DD MMM YYYY' });
-        });
-        $(function () {
-            $("#datetimepicker2").datetimepicker({ format: 'DD MMM YYYY' });
-        });
-        $(function () {
-            $("#datetimepicker3").datetimepicker({ format: 'DD MMM YYYY' });
-        });
-    </script>
 </body>
 
 </html>

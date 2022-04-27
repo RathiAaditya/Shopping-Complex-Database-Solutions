@@ -238,14 +238,14 @@ a {
     <body id="body-pd">
       <header class="header" id="header">
           <div class="header_toggle"> <i class='bx bx-menu' id="header-toggle"></i> 
+            <h1>Agarwal Shopping Complex</h1>
           </div>
           <div> <h5 style=>Use this form to search by name</h5>
-            <form method="POST" action="/home/invoice/search">
-              {% csrf_token %}
-              <input type="text" name="textfield" style="margin-top: 0px" />
-      
-              <button type="submit">Search</button>
-            </form></div>
+            <form class="d-flex" method="POST" action="/home/invoice/search">
+              {% csrf_token %} 
+              <input class="form-control me-2" type="search" placeholder="Search"  aria-label="Search" name="textfield">
+              <button class="btn btn-outline-success" type="submit">Search </button>
+            </form>
          
         
           <div class="header_img"> <img src="static\babyyoda.jpg" alt=""> </div>
