@@ -75,10 +75,6 @@ class Contracts(models.Model):
     Company = models.ForeignKey(
         Companies, default=None, on_delete=models.CASCADE)
 
-# class InvoiceManager(models.Manager):
-#     def get_queryset(self):
-#         qs = super(InvoiceManager,self).get_queryset().annotate()
-
 
 class Invoice(models.Model):
     Invoice_id = models.AutoField(primary_key=True)
