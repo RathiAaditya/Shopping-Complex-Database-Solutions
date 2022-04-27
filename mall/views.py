@@ -93,10 +93,30 @@ def invoicedata(request):
     all_fields = [field.name for field in Invoice._meta.get_fields()]
     del all_fields[0]
     del all_fields[2:4]
-
+    flag = True
     all_fields.insert(2, 'TotalAmount')
-    return render(request, 'invoicedata.html', {'invoice': invoices, 'column': all_fields, 'Invoices': Invoice})
+    return render(request, 'invoicedata.html', {'invoice': invoices, 'column': all_fields, 'Invoices': Invoice, 'fl':flag})
 
+def searchinvoice(request):
+    if request.method == 'POST':
+        search_id = request.POST.get('textfield', None)
+        temp = Companies.objects.filter(name__icontains=search_id)
+        updated_search_id = []
+        for i in temp:
+            updated_search_id.append(i.Company_id)
+        print(updated_search_id)
+        filterfields = Q()
+        for u in updated_search_id:
+            filterfields = filterfields | Q(issued_by_id=u) | Q(issued_to_id=u)
+        print(filterfields) 
+        searched = Invoice.objects.filter(filterfields)
+        print(searched)
+        all_fields = [field.name for field in Invoice._meta.get_fields()]
+        del all_fields[0]
+        del all_fields[2:4]
+        all_fields.insert(2, 'TotalAmount')
+        flag = False
+        return render(request, 'invoicedata.html', {'search': searched, 'column': all_fields, 'fl': flag})
 
 def contractdata(request):
     contracts = Contracts.objects.all()
