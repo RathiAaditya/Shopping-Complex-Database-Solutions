@@ -258,16 +258,16 @@ def generateInvoice(request):
 #             for j in range(num_of_invoices):
 #                 new_inv = Invoice(Amount=amt, Discount=10,GST=18,Date_issued=i.Start_Date+relativedelta(months=j),Date_paid=date.today()+timedelta(4),Contract_id=i.Contract_id, issued_by_id=100000,issued_to_id=comp)
 #                 new_inv.save()
-    cid = request.POST.get('textfield', None)
-    con = Contracts.objects.get(Contract_id=cid)
-    stdate = con.Start_Date
-    amt = con.Price
-    comp = con.Company_id
-    bil_freq = con.Billing_Frequency
-    new_inv = Invoice(Invoice_id=150001, Amount=amt, Discount=10, GST=18, Date_issued=date.today(
-    ), Date_paid=date.today(), Contract_id=cid, issued_by_id=12000110, issued_to_id=comp)
-    new_inv.save()
-    return render(request, 'geninvoice.html')
+    # cid = request.POST.get('textfield', None)
+    # con = Contracts.objects.get(Contract_id=cid)
+    # stdate = con.Start_Date
+    # amt = con.Price
+    # comp = con.Company_id
+    # bil_freq = con.Billing_Frequency
+    # new_inv = Invoice(Invoice_id=150001, Amount=amt, Discount=10, GST=18, Date_issued=date.today(
+    # ), Date_paid=date.today(), Contract_id=cid, issued_by_id=12000110, issued_to_id=comp)
+    # new_inv.save()
+    # return render(request, 'geninvoice.html')
 
 
 def Companyform(request):
