@@ -121,7 +121,7 @@ def searchinvoice(request):
         for u in updated_search_id:
             filterfields = filterfields | Q(issued_by_id=u) | Q(issued_to_id=u)
         print(len(filterfields))
-        filflag=False
+        filflag = False
         if(len(filterfields) == 0):
             filflag = True
         searched = Invoice.objects.filter(filterfields)
@@ -280,22 +280,22 @@ def generateInvoice(request):
 
 def Companyform(request):
     if request.method == "POST":
-        com_form = CompanyForm(request.POST)
-        cont_form = CompanyContactFrom(request.POST)
-        if com_form.is_valid():
-            a = com_form.save()
-            b = cont_form.save(commit=False)
+        form01 = CompanyForm(request.POST)
+        form02 = CompanyContactFrom(request.POST)
+        if form01.is_valid():
+            a = form01.save()
+            b = form02.save(commit=False)
             print("saved")
-            if cont_form.is_valid():
-                b = cont_form.save(commit=False)
+            if form02.is_valid():
+                b = form01.save(commit=False)
                 b.Company = a
                 b.save()
-                cont_form.save_m2m()
+                form02.save_m2m()
                 return redirect('/')
     else:
-        com_form = CompanyForm()
-        cont_form = CompanyContactFrom()
-    context = {'com_form': com_form, 'cont_form': cont_form, }
+        form01 = CompanyForm()
+        form02 = CompanyContactFrom()
+    context = {'form01': form01, 'form02': form02, }
     return render(request, 'companyinput.html', context)
 
 
@@ -341,7 +341,7 @@ def Slotform(request):
             a = form4.save()
             return redirect('/form/insertSlot')
     else:
-        form4 = ShopForm()
+        form4 = SlotForm()
     context3 = {'form4': form4}
     return render(request, 'slotinput.html', context3)
 

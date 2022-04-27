@@ -1,5 +1,5 @@
 {% load crispy_forms_tags %}
-{{form1.errors}}
+
 <html lang="en">
 
 <head>
@@ -553,10 +553,10 @@
                 <div class="container">
                     <div>
                         <div class="row">
-                            {{form4.Slot_id | as_crispy_field}}
+                            {{form4.Slot_status | as_crispy_field}}
                         </div>
                         <div class="row">
-                            {{form4.Slot_Status | as_crispy_field}}
+                            {{form4.Slot_id  | as_crispy_field}}
                         </div>
                         <div class="row">
                             {{form4.Rate | as_crispy_field}}
