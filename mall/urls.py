@@ -1,5 +1,6 @@
 from django.urls import path
 from . import views
+from django.urls import re_path
 
 urlpatterns = [
     path('', views.index, name='index'),
@@ -22,4 +23,6 @@ urlpatterns = [
     path('home/provides', views.providesdata, name="provides"),
     path('otp', views.otp, name='otp'),
     path('home/invoice/search', views.searchinvoice, name='invoiceserach'),
+    re_path(r'form/insertCompany', views.Companyform, name='insertCompany'),
+    re_path(r'form/insertContract', views.Contractform, name='insertContract'),
 ]
