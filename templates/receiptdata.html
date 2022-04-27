@@ -237,19 +237,28 @@ a {
     </script>
     <body id="body-pd">
       <header class="header" id="header">
-          <div class="header_toggle"> <i class='bx bx-menu' id="header-toggle"></i> 
-            <!-- <h1>Agarwal Shopping Complex</h1> -->
-          </div>
-          <div> <h5 style=>Use this form to search by name</h5>
-            <form class="d-flex" method="POST" action="/home/invoice/search">
-              {% csrf_token %} 
-              <input class="form-control me-2" type="search" placeholder="Search"  aria-label="Search" name="textfield">
-              <button class="btn btn-outline-success" type="submit">Search </button>
-            </form>
-         
-        
-          <div class="header_img"> <img src="static\babyyoda.jpg" alt=""> </div>
-      </header>
+        <div class="header_toggle"> <i class='bx bx-menu' id="header-toggle"></i> </div>
+        <h1 style="margin-left: 280px;">Agarwal Shopping Complex</h1>
+        <div class="header_img"> <img src="static\babyyoda.jpg" alt=""> </div>
+        <div>
+          <nav class="navbar navbar-expand-lg navbar-light bg-light">
+            <div class="container-fluid">
+              <a class="navbar-brand" href="#"></a>
+            
+              <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                      
+                </ul>
+                <form class="d-flex" method="POST" action="/home/service/search">
+                  {% csrf_token %} 
+                  <input class="form-control me-2" type="search" placeholder="Search"  aria-label="Search" name="textfield">
+                  <button class="btn btn-outline-success" type="submit">Search </button>
+                </form>
+              </div>
+            </div>
+          </nav>
+        </div>
+    </header>
       <div class="l-navbar" id="nav-bar">
           <nav class="nav">
               <div> <a href="/home" class="nav_link">
@@ -257,28 +266,28 @@ a {
                    <span class="nav_name">Home</span>
                  </a>
                   <div class="nav_list"> 
-                    <a href="/home/customer" class="nav_link "> 
+                    <a href="customer" class="nav_link "> 
                       <i class='bx bx-grid-alt nav_icon'></i> 
                       <span class="nav_name">Customer</span> </a>
-                       <a href="/home/company" class="nav_link">
+                       <a href="company" class="nav_link">
                           <i class='bx bx-user nav_icon'></i> 
                           <span class="nav_name">Company</span> </a>
-                           <a href="/home/invoice" class="nav_link"> 
+                           <a href="  invoice" class="nav_link"> 
                              <i class='bx bx-message-square-detail nav_icon'></i> 
                              <span class="nav_name">Invoice</span> </a>
-                              <a href="/home/contract" class="nav_link"> 
+                              <a href="contract" class="nav_link"> 
                                 <i class='bx bx-bookmark nav_icon'></i>
                                  <span class="nav_name">Contract</span> </a> 
-                                 <a href="/home/shop" class="nav_link">
+                                 <a href="shop" class="nav_link">
                                     <i class='bx bx-folder nav_icon'></i> 
                                     <span class="nav_name">Shop</span> </a>
-                                     <a href="/home/slot" class="nav_link"> 
+                                     <a href="slot" class="nav_link"> 
                                        <i class='bx bx-bar-chart-alt-2 nav_icon'></i> 
                                        <span class="nav_name">Slot</span> </a>
-                                       <a href="/home/booking" class="nav_link"> 
+                                       <a href="booking" class="nav_link"> 
                                          <i class='bx bx-bar-chart-alt-2 nav_icon'></i> 
                                        <span class="nav_name">Booking</span> </a> </div>
-                                     <a href="/home/service" class="nav_link"> 
+                                     <a href="service" class="nav_link"> 
                                        <i class='bx bx-bar-chart-alt-2 nav_icon'></i> 
                                        <span class="nav_name">Service</span> </a> </div>
                                      <a href="/" class="nav_link"> 
@@ -450,7 +459,7 @@ a {
       #wrapper {
         font-size:75%;
         display: block;
-        width: 1500px;
+        width: 850px;
         background: #fff;
         margin: 0 auto;
         padding: 10px 17px;
@@ -459,6 +468,7 @@ a {
       }
 
       #keywords {
+        width: auto;
         margin: 0 auto;
         font-size: 1.2em;
         margin-bottom: 15px;
@@ -505,75 +515,62 @@ a {
   </head>
   <body>
     <body>
-      <div id="wrapper">
-        <h1>Invoices</h1>
-        {% if fl %} 
-        <table id="keywords" cellspacing="0" cellpadding="0">
+      <div id="wrapper" style="width: auto;">
+        <h1>Receipts</h1>
+        {% if fl %}
+        <table id="keywords" cellspacing="0" cellpadding="0" style="width: auto;">
           <thead>
             <tr>
               {% for item in column %}
-
               <th><span>{{item}}</span></th>
               {% endfor %}
             </tr>
           </thead>
           <tbody>
-            {% for inv in invoice %}
+            {% for i in recpt %}
             <tr>
-              <td>{{inv.Invoice_id}}</td>
-              <td>{{inv.Amount}}</td>
-              <td>{{inv.totalamount}}</td>
-              <td>{{inv.Date_issued}}</td>
-              <td>{{inv.Date_paid}}</td>
-              <td>{{inv.Contract_id}}</td>
-              <td>{{inv.issued_by.name}}</td>
-              <td>{{inv.issued_to.name}}</td>
+              <td>{{i.Receipt_id}}</td>
+              <td>{{i.Amount}}</td>
+              <td>{{i.Date_of_issue}}</td>
+              <td>{{i.Booking.Booking_id}}</td>
+              <td>{{i.Slot.Slot_id}}</td>
+              <td>{{i.Booking.mobile.firstname}}</td>
             </tr>
             {% endfor %}
           </tbody>
         </table>
         {% else %}
-        <table id="keywords" cellspacing="0" cellpadding="0">
+        <table id="keywords" cellspacing="0" cellpadding="0" style="width: auto;">
           <thead>
             <tr>
               {% for item in column %}
-
               <th><span>{{item}}</span></th>
-
               {% endfor %}
             </tr>
           </thead>
           <tbody>
-            {% for sr in search %}
+            {% for i in search %}
             <tr>
-              <td>{{sr.Invoice_id}}</td>
-              <td>{{sr.Amount}}</td>
-              <td>{{sr.totalamount}}</td>
-              <td>{{sr.Date_issued}}</td>
-              <td>{{sr.Date_paid}}</td>
-              <td>{{sr.Contract_id}}</td>
-              <td>{{sr.issued_by.name}}</td>
-              <td>{{sr.issued_to.name}}</td>
+                <td>{{i.Receipt_id}}</td>
+                <td>{{i.Amount}}</td>
+                <td>{{i.Date_of_issue}}</td>
+                <td>{{i.Booking_id}}</td>
+                <td>{{i.Slot_id}}</td>
+                <td>{{i.Booking_id.mobile.firstname}}</td>
             </tr>
             {% endfor %}
           </tbody>
         </table>
-
         {% endif %}
-
       </div>
       {% if not fl %}
-      <a href="/home/invoice" style="margin-left: 600px"><h1>View All</h1></a>
+      <a href="/home/receipt" style="margin-left: 600px"><h1>View All</h1></a>
       {% endif %}
-
-      <a href="/home"><h1>Home</h1></a>
-      <!-- <h1>Use this form to search by name</h1>
-      <form method="POST" action="/home/company/search">
-        {% csrf_token %}
-        <input type="text" name="textfield" style="margin-top: 0px" />
-
-        <button type="submit">Search</button>
-      </form> -->
+      <div>
+        <a href="/home"><h1>Home</h1></a>
+      </div>
+      <h1>Use this form to search by name</h1>
+      
     </body>
   </body>
 

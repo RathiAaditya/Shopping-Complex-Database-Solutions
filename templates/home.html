@@ -11,11 +11,12 @@
 
   </head>
   <body>
-    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <!-- <nav class="navbar navbar-expand-lg navbar-light bg-light">
       <div class="container-fluid">
         <a class="navbar-brand" href="#"></a>
       
-        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <div class="collapse navbar-collapse" id="navbarSupportedContent" style="height: 40px;">
+          <h1>Hello {{user}} !!</h1>
           <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                 
           </ul>
@@ -25,8 +26,8 @@
           </form>
         </div>
       </div>
-    </nav>
-    <style>
+    </nav>-->
+    <style> 
       @import url("https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&display=swap");
 
 :root {
@@ -178,39 +179,197 @@ a {
 
 @media screen and (min-width: 768px) {
     body {
-        margin: calc(var(--header-height) + 1rem) 0 0 0;
-        padding-left: calc(var(--nav-width) + 2rem)
+      position: relative;
+      margin: var(--header-height) 0 0 0;
+      padding: 0 1rem;
+      font-family: var(--body-font);
+      font-size: var(--normal-font-size);
+      transition: .5s
+    }
+
+    a {
+      text-decoration: none
     }
 
     .header {
-        height: calc(var(--header-height) + 1rem);
-        padding: 0 2rem 0 calc(var(--nav-width) + 2rem)
+      width: 100%;
+      height: var(--header-height);
+      position: fixed;
+      top: 0;
+      left: 0;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 1rem;
+      background-color: var(--white-color);
+      z-index: var(--z-fixed);
+      transition: .5s
+    }
+
+    .header_toggle {
+      color: var(--first-color);
+      font-size: 1.5rem;
+      cursor: pointer
     }
 
     .header_img {
-        width: 40px;
-        height: 40px
+      width: 35px;
+      height: 35px;
+      display: flex;
+      justify-content: center;
+      border-radius: 50%;
+      overflow: hidden
     }
 
     .header_img img {
-        width: 45px
+      width: 40px
     }
 
     .l-navbar {
-        left: 0;
-        padding: 1rem 1rem 0 0
+      position: fixed;
+      top: 0;
+      left: -30%;
+      width: var(--nav-width);
+      height: 100vh;
+      background-color: var(--first-color);
+      padding: .5rem 1rem 0 0;
+      transition: .5s;
+      z-index: var(--z-fixed)
+    }
+
+    .nav {
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      overflow: hidden
+    }
+
+    .nav_logo,
+    .nav_link {
+      display: grid;
+      grid-template-columns: max-content max-content;
+      align-items: center;
+      column-gap: 1rem;
+      padding: .5rem 0 .5rem 1.5rem
+    }
+
+    .nav_logo {
+      margin-bottom: 2rem
+    }
+
+    .nav_logo-icon {
+      font-size: 1.25rem;
+      color: var(--white-color)
+    }
+
+    .nav_logo-name {
+      color: var(--white-color);
+      font-weight: 700
+    }
+
+    .nav_link {
+      position: relative;
+      color: var(--first-color-light);
+      margin-bottom: 1.5rem;
+      transition: .3s
+    }
+
+    .nav_link:hover {
+      color: var(--white-color)
+    }
+
+    .nav_icon {
+      font-size: 1.25rem
     }
 
     .show {
-        width: calc(var(--nav-width) + 156px)
+      left: 0
     }
 
     .body-pd {
+      padding-left: calc(var(--nav-width) + 1rem)
+    }
+
+    .active {
+      color: var(--white-color)
+    }
+
+    .active::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      width: 2px;
+      height: 32px;
+      background-color: var(--white-color)
+    }
+
+    .height-100 {
+      height: 100vh
+    }
+
+    @media screen and (min-width: 768px) {
+      body {
+        margin: calc(var(--header-height) + 1rem) 0 0 0;
+        padding-left: calc(var(--nav-width) + 2rem)
+      }
+
+      .header {
+        height: calc(var(--header-height) + 1rem);
+        padding: 0 2rem 0 calc(var(--nav-width) + 2rem)
+      }
+
+      .header_img {
+        width: 40px;
+        height: 40px
+      }
+
+      .header_img img {
+        width: 45px
+      }
+
+      .l-navbar {
+        left: 0;
+        padding: 1rem 1rem 0 0
+      }
+
+      .show {
+        width: calc(var(--nav-width) + 156px)
+      }
+
+      .body-pd {
         padding-left: calc(var(--nav-width) + 188px)
+      }
     }
 }
+.row{
+  margin-left: 150px;
+  padding: 25px;
+}
+.height-0-bg-light{
+  height: 40px;
+}
+.rowcont{
+  padding: 15px;
+  background-color: ghostwhite;
+  
+}
+
+.btns{
+  display: inline-block;
+  top: 50%;
+  left: 50%;
+  text-align: center;
+}
+.card{
+  text-align: center;
+  height: 150px;
+  background-color: lightblue;
+  width: 280px;
+ 
+}
     </style>
-    <script>
+    <script> 
       document.addEventListener("DOMContentLoaded", function(event) {
 
         const showNavbar = (toggleId, navId, bodyId, headerId) =>{
@@ -253,7 +412,26 @@ a {
     <body id="body-pd">
       <header class="header" id="header">
           <div class="header_toggle"> <i class='bx bx-menu' id="header-toggle"></i> </div>
+          <h1>Agarwal Shopping Complex</h1>
           <div class="header_img"> <img src="static\babyyoda.jpg" alt=""> </div>
+          <div>
+            <nav class="navbar navbar-expand-lg navbar-light bg-light">
+              <div class="container-fluid">
+                <a class="navbar-brand" href="#"></a>
+  
+                <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                  <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+  
+                  </ul>
+                  <form class="d-flex" method="POST" action="/home/company/search">
+                    {% csrf_token %} 
+                    <input class="form-control me-2" type="search" placeholder="Search"  aria-label="Search" name="textfield">
+                    <button class="btn btn-outline-success" type="submit">Search </button>
+                  </form>
+                </div>
+              </div>
+            </nav>
+          </div>
       </header>
       <div class="l-navbar" id="nav-bar">
           <nav class="nav">
@@ -266,7 +444,7 @@ a {
                       <i class='bx bx-user nav_icon'></i> 
                       <span class="nav_name">Customer</span> </a>
                        <a href="home/company" class="nav_link">
-                          <i class=''></i> 
+                          <i class='bx bx-user nav_icon'></i> 
                           <span class="nav_name">Company</span> </a>
                            <a href="home/invoice" class="nav_link"> 
                              <i class='bx bx-message-square-detail nav_icon'></i> 
@@ -301,17 +479,21 @@ a {
           <h4 style="color: black">Hello {{user}}</h4>
       
     </div> {% endcomment %}
-      <div class="height-0 bg-light">
+      <!-- <div class="height-0-bg-light">
           <h1>Hello {{user}} !!</h1>
-      </div>
+      </div> -->
     </div>
+    <div class="rowcont">
     <div class="row">
       <div class="col-sm-3">
         <div class="card">
           <div class="card-body">
             <h5 class="card-title">Customer</h5>
-            <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
-            <a href="home/customer" class="btn btn-primary">Go to Customer table </a>
+            <p class="card-text"></p>
+            <div class="btns">
+            <a href="home/customer" class="btn btn-primary">Customer data </a>
+            <a href="home/form/insertCustomer" class="btn btn-primary">Enter data </a>
+            </div>
           </div>
         </div>
       </div>
@@ -319,38 +501,51 @@ a {
         <div class="card">
           <div class="card-body">
             <h5 class="card-title">Company</h5>
-            <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
-            <a href="home/company" class="btn btn-primary">Go to Company table </a>
+            <p class="card-text"></p>
+            <div class="btns">
+            <a href="home/company" class="btn btn-primary">Company data </a>
+            <a href="form/insertCompany" class="btn btn-primary">Enter data </a>
+          </div>
           </div>
         </div>
       </div>
       <div class="col-sm-3">
           <div class="card">
             <div class="card-body">
-              <h5 class="card-title">Invoice</h5>
-              <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
-              <a href="home/invoice" class="btn btn-primary">Go to Invoice table</a>
+              <h5 class="card-title">Service</h5>
+              <p class="card-text"></p>
+              <div class="btns">
+                <a href="home/service" class="btn btn-primary">Service data </a>
+                <a href="home/form/insertService" class="btn btn-primary">Enter data </a>
+              </div>
             </div>
           </div>
         </div>
-        <div class="col-sm-3">
-          <div class="card">
-            <div class="card-body">
-              <h5 class="card-title">Contract</h5>
-              <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
-              <a href="home/contract" class="btn btn-primary">Go to Contract table</a>
-            </div>
-          </div>
-        </div>
+        
       
     </div>
       <div class="row">
         <div class="col-sm-3">
           <div class="card">
             <div class="card-body">
+              <h5 class="card-title">Contract</h5>
+              <p class="card-text"></p>
+              <div class="btns">
+                <a href="home/contract" class="btn btn-primary">Contract data </a>
+                <a href="home/form/insertContract" class="btn btn-primary">Enter data </a>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-sm-3">
+          <div class="card">
+            <div class="card-body">
               <h5 class="card-title">Shop</h5>
-              <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
-              <a href="home/shop" class="btn btn-primary">Go to Shop table </a>
+              <p class="card-text"></p>
+              <div class="btns">
+                <a href="home/shop" class="btn btn-primary">Shop data </a>
+                <a href="home/form/insertShop" class="btn btn-primary">Enter data </a>
+              </div>
             </div>
           </div>
         </div>
@@ -358,34 +553,47 @@ a {
           <div class="card">
             <div class="card-body">
               <h5 class="card-title">Slot</h5>
-              <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
-              <a href="home/slot" class="btn btn-primary">Go to Slot table </a>
+              <p class="card-text"></p>
+              <div class="btns">
+                <a href="home/slot" class="btn btn-primary">Slot data </a>
+                <a href="home/form/insertSlot" class="btn btn-primary">Enter data </a>
+              </div>
             </div>
           </div>
         </div>
+        <div class="row">
         <div class="col-sm-3">
             <div class="card">
               <div class="card-body">
                 <h5 class="card-title">Booking</h5>
-                <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
-                <a href="home/booking" class="btn btn-primary">Go to Booking table</a>
+                <p class="card-text"></p>
+                <div class="btns">
+                  <a href="home/booking" class="btn btn-primary">Booking data </a>
+                  
+                </div>
               </div>
             </div>
           </div>
           <div class="col-sm-3">
             <div class="card">
               <div class="card-body">
-                <h5 class="card-title">Service</h5>
-                <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
-                <a href="home/service" class="btn btn-primary">Go to Service table </a>
+                <h5 class="card-title">Invoice</h5>
+                <p class="card-text"></p>
+                <div class="btns">
+                  <a href="home/invoice" class="btn btn-primary">Invoice data </a>
+                  
+                </div>
               </div>
             </div>
           </div>
+        </div>
+      </div>
         
           
      
       <!--Container Main end-->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.js" async defer></script>
+      <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.js" async
+        defer></script>
   </body>
-</html>
 
+</html>

@@ -26,9 +26,11 @@ class CompanyContactFrom(forms.ModelForm):
 
 
 class ContractForm(forms.ModelForm):
+    Company = forms.ModelChoiceField(queryset=Companies.objects.all())
     class Meta:
         model = Contracts
         fields = '__all__'
+        print(fields)
 
 
 class ShopForm(forms.ModelForm):

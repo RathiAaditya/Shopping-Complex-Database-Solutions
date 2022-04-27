@@ -131,9 +131,8 @@ class Booking(models.Model):
     in_time = models.DateTimeField()
     out_time = models.DateTimeField()
 
-    mobile = models.ForeignKey(Customer, on_delete=models.CASCADE, validators=[RegexValidator(
-        regex='^(\+91[\-\s]?)?[0]?(91)?[789]\d{9}$', message='should be a valid phone number', code='no match')])
-    Invoice = models.ForeignKey(Invoice, on_delete=models.CASCADE, default=0)
+    mobile = models.ForeignKey(Customer, on_delete=models.CASCADE)
+    
     Slot = models.ForeignKey(Slots, on_delete=models.CASCADE, default='def')
 
     class Meta:
@@ -173,3 +172,11 @@ class Bound_by(models.Model):
 
 class AdminModel(models.Model):
     admin_name = models.CharField(max_length=100, default='def')
+
+class ParkingReceipt(models.Model):
+    Receipt_id = models.AutoField(primary_key=True)
+    Amount = models.FloatField()
+    Date_of_issue = models.DateField()
+    Booking = models.ForeignKey(Booking, on_delete=models.CASCADE, default='def')
+    
+    Slot = models.ForeignKey(Slots, on_delete=models.CASCADE, default='def')

@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from .models import Booking, Bound_by, Companies, Company_contact_no, Contracts, Customer, Invoice, Provides, Services, Shops, Slots
+from .models import Booking, Bound_by, Companies, Company_contact_no, Contracts, Customer, Invoice, Provides, Services, Shops, Slots,ParkingReceipt
 
 
 admin.site.register(Customer)
@@ -14,5 +14,6 @@ admin.site.register(Slots)
 admin.site.register(Services)
 admin.site.register(Bound_by)
 admin.site.register(Provides)
+admin.site.register(ParkingReceipt)
 
 

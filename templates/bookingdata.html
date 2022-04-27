@@ -239,8 +239,8 @@ a {
     <body id="body-pd">
       <header class="header" id="header">
           <div class="header_toggle"> <i class='bx bx-menu' id="header-toggle"></i> </div>
+          <h1 style="margin-left: 280px;">Agarwal Shopping Complex</h1>
           <div class="header_img"> <img src="static\babyyoda.jpg" alt=""> </div>
-<<<<<<< HEAD
           <div>
             <nav class="navbar navbar-expand-lg navbar-light bg-light">
               <div class="container-fluid">
@@ -250,16 +250,15 @@ a {
                   <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                         
                   </ul>
-                  <form class="d-flex">
-                    <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
-                    <button class="btn btn-outline-success" type="submit">Search</button>
+                  <form class="d-flex" method="POST" action="/home/booking/search">
+                    {% csrf_token %} 
+                    <input class="form-control me-2" type="search" placeholder="Search"  aria-label="Search" name="textfield">
+                    <button class="btn btn-outline-success" type="submit">Search </button>
                   </form>
                 </div>
               </div>
             </nav>
           </div>
-=======
->>>>>>> f1b90df5f4762621a10d52c10a09a5fb9329bbcd
       </header>
       <div class="l-navbar" id="nav-bar">
           <nav class="nav">
@@ -533,9 +532,10 @@ a {
               <td>{{sr.Booking_id}}</td>
               <td>{{sr.in_time}}</td>
               <td>{{sr.out_time}}</td>
-              <td>{{sr.mobile}}</td>
-              <td>{{sr.Invoice}}</td>
-              <td>{{sr.Slot}}</td>
+              <td>{{sr.mobile.firstname}}</td>
+              <td>{{sr.Slot.Slot_id}}</td>
+        
+              
             </tr>
             {% endfor %}
           </tbody>
@@ -555,9 +555,9 @@ a {
               <td>{{sr.Booking_id}}</td>
               <td>{{sr.in_time}}</td>
               <td>{{sr.out_time}}</td>
-              <td>{{sr.mobile}}</td>
-              <td>{{sr.Invoice}}</td>
-              <td>{{sr.Slot}}</td>
+              <td>{{sr.mobile.firstname}}</td>
+              
+              <td>{{sr.Slot.Slot_id}}</td>
             </tr>
             {% endfor %}
           </tbody>
@@ -571,11 +571,11 @@ a {
         <a href="/home"><h1>Home</h1></a>
       </div>
       <h1>Use this form to search by name</h1>
-      <form method="POST" action="/home/booking/search">
+      <form method="POST" action="/home/genrecpt">
         {% csrf_token %}
         <input type="text" name="textfield" style="margin-left: 700px" />
 
-        <button type="submit">Search</button>
+        <button type="submit">Generate receipts</button>
       </form>
     </body>
   </body>
