@@ -121,6 +121,7 @@ def searchinvoice(request):
         for u in updated_search_id:
             filterfields = filterfields | Q(issued_by_id=u) | Q(issued_to_id=u)
         print(len(filterfields))
+        filflag=False
         if(len(filterfields) == 0):
             filflag = True
         searched = Invoice.objects.filter(filterfields)
@@ -152,6 +153,7 @@ def searchcompany(request):
     if request.method == 'POST':
         search_id = request.POST.get('textfield', None)
         searched = Companies.objects.filter(name__icontains=search_id)
+        filflag = False
         if(len(searched) == 0):
             filflag = True
             return render(request, 'companydata.html', {'ffl': filflag})
@@ -164,7 +166,10 @@ def searchcompany(request):
 def searchshop(request):
     if request.method == 'POST':
         search_id = request.POST.get('textfield', None)
-        searched = Shops.objects.filter(Shop_id__startswith=search_id)
+
+        filterfields = Q(Shop_id__iexact=search_id) | Q(
+            Status__icontains=search_id)
+        searched = Shops.objects.filter(filterfields)
         all_fields = [field.name for field in Shops._meta.get_fields()]
         del all_fields[0]
         flag = False
@@ -195,7 +200,10 @@ def searchbooking(request):
     if request.method == 'POST':
         search_id = request.POST.get('textfield', None)
         searched = Booking.objects.filter(Booking_id__startswith=search_id)
+        filterfields = Q(Booking_id__icontains=search_id) | Q(
+            mobile_id__istartswith=search_id) | Q(Slot__istartswith=search_id)
         all_fields = [field.name for field in Booking._meta.get_fields()]
+
         # del all_fields[0]
         flag = False
         return render(request, 'bookingdata.html', {'search': searched, 'column': all_fields, 'fl': flag})
@@ -305,8 +313,8 @@ def Contractform(request):
                 b.Contract = a
                 b.save()
                 form2.save_m2m()
-                return redirect('/form/insertContract')
-            return redirect('/form/insertContract')
+                return redirect('home/form/insertContract')
+            return redirect('home/form/insertContract')
     else:
         form1 = ContractForm()
         form2 = ProvidesForm()
