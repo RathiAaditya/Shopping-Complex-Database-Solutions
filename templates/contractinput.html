@@ -547,7 +547,7 @@
 <body>
     <div class="container">
         <form method="POST" action="">
-            <fieldset>
+            <fieldset style="padding: 1px; margin-top: 20px;">
                 {% csrf_token %}
                 <legend>Contract Form</legend>
                 <div class="container">
@@ -562,7 +562,7 @@
                             {{form1.Type | as_crispy_field}}
                         </div>
                     </div>
-                    <div class="row">
+                    <div class="row" style="padding: 1px; margin-top: 20px;">
                         <div class="col">
                             <div class="input-group date" id="datetimepicker1" data-target-input="nearest">
                                 {{ form1.Start_Date | as_crispy_field}}
@@ -591,7 +591,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="row">
+                    <div class="row" style="padding: 1px; margin-top: 20px;">
                         <div class="col">
                             {{form1.Price | as_crispy_field}}
                         </div>
@@ -603,8 +603,10 @@
                         </div>
                     </div>
                 </div>
-                <div class="row">
-                    <button type="submit" class="btn btn-primary">Submit</button>
+                <div style="padding: 1px; margin-top: 20px; align-content: center;">
+                    <div>
+                        <button type="submit" class="btn btn-primary">Submit</button>
+                    </div>
                 </div>
 
             </fieldset>

@@ -214,8 +214,8 @@ def Contractform(request):
                 b.Contract = a
                 b.save()
                 form2.save_m2m()
-                return redirect('/')
-            return redirect('/')
+                return redirect('/form/insertContract')
+            return redirect('/form/insertContract')
     else:
         form1 = ContractForm()
         form2 = ProvidesForm()
