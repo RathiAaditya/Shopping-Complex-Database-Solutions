@@ -30,12 +30,9 @@
         overflow: hidden;
       }
 
-      @media screen 
-
-       {
+      @media screen {
         body {
           background-size: cover;
-          
         }
       }
 
@@ -139,7 +136,7 @@
         color: #0000ff;
       }
     </style>
-    <div class="loginBox" style="z-index: 0;">
+    <div class="loginBox" style="z-index: 0">
       <img
         class="user"
         src="https://i.ibb.co/yVGxFPR/23.png"
@@ -165,12 +162,12 @@
         </div>
         <input type="submit" name="" value="Login" />
       </form>
-      <a href="#">Forget Password<br /> </a>
-      {% if messages %}
-      {% for message in messages %}
-      <h5 style="color: red; margin-top: 10px; margin-left:50px">{{message}}</h5>
-      {% endfor %}
-      {% endif %}
+      <a href="/otp">Forgot Password<br /> </a>
+      {% if messages %} {% for message in messages %}
+      <h5 style="color: red; margin-top: 10px; margin-left: 50px">
+        {{message}}
+      </h5>
+      {% endfor %} {% endif %}
     </div>
 
     <!-- Optional JavaScript -->
@@ -180,7 +177,6 @@
       integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
       crossorigin="anonymous"
     ></script>
-
 
     <!-- Option 2: Separate Popper and Bootstrap JS -->
     <!--
@@ -193,7 +189,7 @@
       Enter second Number<input type="text" name="num2" /><br />
       <input type="submit" />
     </form> -->
-    <br>
+    <br />
     <!-- <a href="customer">Get Customer Data</a><br><br>
     <a href="company">Get Company Data</a><br><br>
     <a href="invoice">Get Invoice Data</a><br><br>
@@ -209,9 +205,5 @@
       integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
       crossorigin="anonymous"
     ></script>
-      
-      
-    
-
   </body>
 </html>
