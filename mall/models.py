@@ -6,7 +6,7 @@ from tkinter import CASCADE
 from xmlrpc.client import boolean
 from django.db import models
 from django.core.validators import RegexValidator
-from django.db.models import F,UniqueConstraint
+from django.db.models import F, UniqueConstraint
 # Create your models here.
 
 
@@ -28,10 +28,13 @@ class Companies(models.Model):
 
 
 class Company_contact_no(models.Model):
-    
-    Contact_no = models.CharField(validators=[RegexValidator(regex='^(\+91[\-\s]?)?[0]?(91)?[789]\d{9}$', message='should be a valid phone number', code='no match')], max_length=12)
-    Company = models.ForeignKey(Companies, on_delete=models.CASCADE,default='def')
-    class Meta: 
+
+    Contact_no = models.CharField(validators=[RegexValidator(
+        regex='^(\+91[\-\s]?)?[0]?(91)?[789]\d{9}$', message='should be a valid phone number', code='no match')], max_length=12)
+    Company = models.ForeignKey(
+        Companies, on_delete=models.CASCADE, default='def')
+
+    class Meta:
         unique_together = (("Contact_no", "Company_id"),)
 
 
@@ -83,9 +86,13 @@ class Invoice(models.Model):
     GST = models.FloatField()
     Date_issued = models.DateTimeField()
     Date_paid = models.DateTimeField(blank=True)
-    Contract = models.ForeignKey(Contracts,on_delete=models.CASCADE,default='def')
-    issued_by = models.ForeignKey(Companies,on_delete=models.CASCADE, related_name='company_issuing',default='def')
-    issued_to = models.ForeignKey(Companies,on_delete=models.CASCADE, related_name='company_issued',default='def')
+    Contract = models.ForeignKey(
+        Contracts, on_delete=models.CASCADE, default='def')
+    issued_by = models.ForeignKey(
+        Companies, on_delete=models.CASCADE, related_name='company_issuing', default='def')
+    issued_to = models.ForeignKey(
+        Companies, on_delete=models.CASCADE, related_name='company_issued', default='def')
+
     class Meta:
         verbose_name_plural = "Invoices"
 

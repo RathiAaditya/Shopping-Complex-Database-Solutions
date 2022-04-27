@@ -107,7 +107,8 @@ def invoicedata(request):
     del all_fields[2:4]
     flag = True
     all_fields.insert(2, 'TotalAmount')
-    return render(request, 'invoicedata.html', {'invoice': invoices, 'column': all_fields, 'Invoices': Invoice, 'fl':flag})
+    return render(request, 'invoicedata.html', {'invoice': invoices, 'column': all_fields, 'Invoices': Invoice, 'fl': flag})
+
 
 def searchinvoice(request):
     if request.method == 'POST':
@@ -121,7 +122,7 @@ def searchinvoice(request):
         for u in updated_search_id:
             filterfields = filterfields | Q(issued_by_id=u) | Q(issued_to_id=u)
         print(len(filterfields))
-        if(len(filterfields)==0):
+        if(len(filterfields) == 0):
             filflag = True
         searched = Invoice.objects.filter(filterfields)
         print(searched)
@@ -130,7 +131,8 @@ def searchinvoice(request):
         del all_fields[2:4]
         all_fields.insert(2, 'TotalAmount')
         flag = False
-        return render(request, 'invoicedata.html', {'search': searched, 'column': all_fields, 'fl': flag, 'ffl':filflag})
+        return render(request, 'invoicedata.html', {'search': searched, 'column': all_fields, 'fl': flag, 'ffl': filflag})
+
 
 def contractdata(request):
     contracts = Contracts.objects.all()
@@ -152,19 +154,22 @@ def searchcompany(request):
     if request.method == 'POST':
         search_id = request.POST.get('textfield', None)
         searched = Companies.objects.filter(name__icontains=search_id)
-        if(len(searched)==0):
+        if(len(searched) == 0):
             filflag = True
-            return render(request, 'companydata.html', {'ffl':filflag})
+            return render(request, 'companydata.html', {'ffl': filflag})
         all_fields = [field.name for field in Companies._meta.get_fields()]
         del all_fields[0:4]
         flag = False
-        return render(request, 'companydata.html', {'search': searched, 'column': all_fields, 'fl': flag, 'ffl':filflag})
+        return render(request, 'companydata.html', {'search': searched, 'column': all_fields, 'fl': flag, 'ffl': filflag})
 
 
 def searchshop(request):
     if request.method == 'POST':
         search_id = request.POST.get('textfield', None)
-        searched = Shops.objects.filter(Shop_id__startswith=search_id)
+
+        filterfields = Q(Shop_id__iexact=search_id) | Q(
+            Status__icontains=search_id)
+        searched = Shops.objects.filter(filterfields)
         all_fields = [field.name for field in Shops._meta.get_fields()]
         del all_fields[0]
         flag = False
@@ -174,7 +179,9 @@ def searchshop(request):
 def searchservice(request):
     if request.method == 'POST':
         search_id = request.POST.get('textfield', None)
-        searched = Services.objects.filter(Service_id__startswith=search_id)
+        filterfields = Q(Service_id__iexact=search_id) | Q(
+            Type__icontains=search_id)
+        searched = Services.objects.filter(filterfields)
         all_fields = [field.name for field in Shops._meta.get_fields()]
         del all_fields[0]
         flag = False
@@ -182,9 +189,20 @@ def searchservice(request):
 
 
 def searchslot(request):
+
     if request.method == 'POST':
+        # a = 2
+
         search_id = request.POST.get('textfield', None)
-        searched = Slots.objects.filter(Slot_id__startswith=search_id)
+
+        if search_id == True:
+            search_id = 1
+        if search_id == False:
+            search_id = 0
+
+        filterfields = Q(Slot_status__iexact=search_id) | Q(
+            Slot_id__iexact=search_id)
+        searched = Slots.objects.filter(filterfields)
         all_fields = [field.name for field in Slots._meta.get_fields()]
         del all_fields[0]
         flag = False
@@ -205,7 +223,7 @@ def searchcustomer(request):
     if request.method == 'POST':
         search_id = request.POST.get('textfield', None)
         filterfields = Q(firstname__icontains=search_id) | Q(
-            lastname__icontains=search_id) | Q(mobile_id__icontains=search_id)
+            lastname__icontains=search_id) | Q(mobile_id__icontains=search_id) | Q(Vehicle_id__icontains=search_id)
         searched = Customer.objects.filter(filterfields)
         all_fields = [field.name for field in Customer._meta.get_fields()]
         del all_fields[0]
