@@ -8,7 +8,7 @@ from django.contrib import messages
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate,login,logout
 from django.db.models import Q
-from mall.models import Companies, Company_contact_no, Customer, Invoice, Contracts, AdminModel,Shops,Slots,Services,Booking
+from mall.models import Companies, Company_contact_no, Customer, Invoice, Contracts, AdminModel, Provides,Shops,Slots,Services,Booking
 
 # Create your views here.
 
@@ -103,6 +103,14 @@ def contractdata(request):
     all_fields = [field.name for field in Contracts._meta.get_fields()]
     del all_fields[0:3]
     return render(request, 'contractdata.html', {'contract': contracts, 'column': all_fields})
+
+def providesdata(request):
+    provides = Provides.objects.all()
+    all_fields = [field.name for field in Provides._meta.get_fields()]
+    # del all_fields[0:3]
+    all_fields.append('Company')
+    flag = True
+    return render(request, 'providesdata.html', {'provide': provides, 'column': all_fields, 'fl':flag})
 
 
 def searchcompany(request):

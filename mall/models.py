@@ -138,7 +138,7 @@ class Booking(models.Model):
 
 
 class Services(models.Model):
-    Service_id = models.CharField(primary_key=True, max_length=40)
+    Service_id = models.IntegerField(primary_key=True)
     Type = models.CharField(max_length=30)
 
     class Meta:
