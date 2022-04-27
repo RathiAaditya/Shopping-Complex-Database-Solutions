@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'crispy_forms',
 ]
 
 MIDDLEWARE = [
@@ -78,13 +79,15 @@ WSGI_APPLICATION = 'shmalldb.wsgi.application'
 # https://docs.djangoproject.com/en/4.0/ref/settings/#databases
 
 DATABASES = {
+
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'shoppingmall',
+        'NAME': 'shoppingmall2',
         'USER': 'postgres',
-        'PASSWORD': '1234',
+        'PASSWORD': 'sankalp02',
         'HOST': 'localhost',
     }
+
 }
 
 
