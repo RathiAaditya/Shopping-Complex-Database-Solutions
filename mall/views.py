@@ -108,7 +108,9 @@ def searchinvoice(request):
         filterfields = Q()
         for u in updated_search_id:
             filterfields = filterfields | Q(issued_by_id=u) | Q(issued_to_id=u)
-        print(filterfields) 
+        print(len(filterfields))
+        if(len(filterfields)==0):
+            filflag = True
         searched = Invoice.objects.filter(filterfields)
         print(searched)
         all_fields = [field.name for field in Invoice._meta.get_fields()]
@@ -116,7 +118,7 @@ def searchinvoice(request):
         del all_fields[2:4]
         all_fields.insert(2, 'TotalAmount')
         flag = False
-        return render(request, 'invoicedata.html', {'search': searched, 'column': all_fields, 'fl': flag})
+        return render(request, 'invoicedata.html', {'search': searched, 'column': all_fields, 'fl': flag, 'ffl':filflag})
 
 def contractdata(request):
     contracts = Contracts.objects.all()
@@ -137,10 +139,13 @@ def searchcompany(request):
     if request.method == 'POST':
         search_id = request.POST.get('textfield', None)
         searched = Companies.objects.filter(name__icontains=search_id)
+        if(len(searched)==0):
+            filflag = True
+            return render(request, 'companydata.html', {'ffl':filflag})
         all_fields = [field.name for field in Companies._meta.get_fields()]
         del all_fields[0:4]
         flag = False
-        return render(request, 'companydata.html', {'search': searched, 'column': all_fields, 'fl': flag})
+        return render(request, 'companydata.html', {'search': searched, 'column': all_fields, 'fl': flag, 'ffl':filflag})
 
 
 def searchshop(request):
