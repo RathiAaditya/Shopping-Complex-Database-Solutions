@@ -14,7 +14,7 @@ from mall.models import Booking, Companies, Customer, Invoice, Contracts, AdminM
 from django.shortcuts import render
 
 from mall.models import Companies, Customer, Invoice, Contracts
-from .forms import CompanyForm, CompanyContactFrom, CustomerForm, ContractForm, ServicesForm, ProvidesForm
+from .forms import CompanyForm, CompanyContactFrom, CustomerForm, ContractForm, ServicesForm, ProvidesForm, ShopForm, SlotForm
 #import forms
 
 
@@ -312,3 +312,51 @@ def Contractform(request):
         form2 = ProvidesForm()
     context1 = {'form1': form1, 'form2': form2, }
     return render(request, 'contractinput.html', context1)
+
+
+def Shopform(request):
+    if request.method == "POST":
+        form3 = ShopForm(request.POST)
+        if form3.is_valid():
+            a = form3.save()
+            return redirect('/form/insertShop')
+    else:
+        form3 = ShopForm()
+    context2 = {'form3': form3}
+    return render(request, 'shopinput.html', context2)
+
+
+def Slotform(request):
+    if request.method == "POST":
+        form4 = SlotForm(request.POST)
+        if form4.is_valid():
+            a = form4.save()
+            return redirect('/form/insertSlot')
+    else:
+        form4 = ShopForm()
+    context3 = {'form4': form4}
+    return render(request, 'slotinput.html', context3)
+
+
+def Servicesform(request):
+    if request.method == "POST":
+        form5 = ServicesForm(request.POST)
+        if form5.is_valid():
+            a = form5.save()
+            return redirect('/form/insertServices')
+    else:
+        form5 = ServicesForm()
+    context4 = {'form5': form5}
+    return render(request, 'servicesinput.html', context4)
+
+
+def Customerform(request):
+    if request.method == "POST":
+        form6 = CustomerForm(request.POST)
+        if form6.is_valid():
+            a = form6.save()
+            return redirect('/form/insertCustomer')
+    else:
+        form6 = CustomerForm()
+    context5 = {'form6': form6}
+    return render(request, 'customerinput.html', context5)
