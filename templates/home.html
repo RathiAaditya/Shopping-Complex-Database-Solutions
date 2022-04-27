@@ -15,7 +15,8 @@
       <div class="container-fluid">
         <a class="navbar-brand" href="#"></a>
       
-        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <div class="collapse navbar-collapse" id="navbarSupportedContent" style="height: 40px;">
+          <h1>Hello {{user}} !!</h1>
           <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                 
           </ul>
@@ -209,6 +210,29 @@ a {
         padding-left: calc(var(--nav-width) + 188px)
     }
 }
+.row{
+  margin-left: 150px;
+  padding: 20px;
+}
+.height-0-bg-light{
+  height: 40px;
+}
+.rowcont{
+  padding: 15px;
+  background-color: ghostwhite;
+}
+
+.btns{
+  display: inline-block;
+  top: 50%;
+  left: 50%;
+  text-align: center;
+}
+.card{
+  text-align: center;
+  height: 150px;
+  background-color: lightblue;
+}
     </style>
     <script>
       document.addEventListener("DOMContentLoaded", function(event) {
@@ -301,17 +325,21 @@ a {
           <h4 style="color: black">Hello {{user}}</h4>
       
     </div> {% endcomment %}
-      <div class="height-0 bg-light">
+      <!-- <div class="height-0-bg-light">
           <h1>Hello {{user}} !!</h1>
-      </div>
+      </div> -->
     </div>
+    <div class="rowcont">
     <div class="row">
       <div class="col-sm-3">
         <div class="card">
           <div class="card-body">
             <h5 class="card-title">Customer</h5>
-            <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
-            <a href="home/customer" class="btn btn-primary">Go to Customer table </a>
+            <p class="card-text"></p>
+            <div class="btns">
+            <a href="home/customer" class="btn btn-primary">Customer data </a>
+            <a href="home/form/insertCustomer" class="btn btn-primary">Enter data </a>
+            </div>
           </div>
         </div>
       </div>
@@ -319,8 +347,11 @@ a {
         <div class="card">
           <div class="card-body">
             <h5 class="card-title">Company</h5>
-            <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
-            <a href="home/company" class="btn btn-primary">Go to Company table </a>
+            <p class="card-text"></p>
+            <div class="btns">
+            <a href="home/company" class="btn btn-primary">Company data </a>
+            <a href="home/form/insertCompany" class="btn btn-primary">Enter data </a>
+          </div>
           </div>
         </div>
       </div>
@@ -328,29 +359,39 @@ a {
           <div class="card">
             <div class="card-body">
               <h5 class="card-title">Invoice</h5>
-              <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
-              <a href="home/invoice" class="btn btn-primary">Go to Invoice table</a>
+              <p class="card-text"></p>
+              <div class="btns">
+                <a href="home/invoice" class="btn btn-primary">Invoice data </a>
+                
+              </div>
             </div>
           </div>
         </div>
-        <div class="col-sm-3">
-          <div class="card">
-            <div class="card-body">
-              <h5 class="card-title">Contract</h5>
-              <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
-              <a href="home/contract" class="btn btn-primary">Go to Contract table</a>
-            </div>
-          </div>
-        </div>
+        
       
     </div>
       <div class="row">
         <div class="col-sm-3">
           <div class="card">
             <div class="card-body">
+              <h5 class="card-title">Contract</h5>
+              <p class="card-text"></p>
+              <div class="btns">
+                <a href="home/contract" class="btn btn-primary">Contract data </a>
+                <a href="home/form/insertContract" class="btn btn-primary">Enter data </a>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-sm-3">
+          <div class="card">
+            <div class="card-body">
               <h5 class="card-title">Shop</h5>
-              <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
-              <a href="home/shop" class="btn btn-primary">Go to Shop table </a>
+              <p class="card-text"></p>
+              <div class="btns">
+                <a href="home/shop" class="btn btn-primary">Shop data </a>
+                <a href="home/form/insertShop" class="btn btn-primary">Enter data </a>
+              </div>
             </div>
           </div>
         </div>
@@ -358,17 +399,24 @@ a {
           <div class="card">
             <div class="card-body">
               <h5 class="card-title">Slot</h5>
-              <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
-              <a href="home/slot" class="btn btn-primary">Go to Slot table </a>
+              <p class="card-text"></p>
+              <div class="btns">
+                <a href="home/slot" class="btn btn-primary">Slot data </a>
+                <a href="home/form/insertSlot" class="btn btn-primary">Enter data </a>
+              </div>
             </div>
           </div>
         </div>
+        <div class="row">
         <div class="col-sm-3">
             <div class="card">
               <div class="card-body">
                 <h5 class="card-title">Booking</h5>
-                <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
-                <a href="home/booking" class="btn btn-primary">Go to Booking table</a>
+                <p class="card-text"></p>
+                <div class="btns">
+                  <a href="home/booking" class="btn btn-primary">Booking data </a>
+                  
+                </div>
               </div>
             </div>
           </div>
@@ -376,11 +424,16 @@ a {
             <div class="card">
               <div class="card-body">
                 <h5 class="card-title">Service</h5>
-                <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
-                <a href="home/service" class="btn btn-primary">Go to Service table </a>
+                <p class="card-text"></p>
+                <div class="btns">
+                  <a href="home/service" class="btn btn-primary">Service data </a>
+                  <a href="home/form/insertService" class="btn btn-primary">Enter data </a>
+                </div>
               </div>
             </div>
           </div>
+        </div>
+      </div>
         
           
      

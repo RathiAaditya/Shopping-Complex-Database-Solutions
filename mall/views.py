@@ -152,6 +152,7 @@ def searchcompany(request):
     if request.method == 'POST':
         search_id = request.POST.get('textfield', None)
         searched = Companies.objects.filter(name__icontains=search_id)
+        filflag = False
         if(len(searched)==0):
             filflag = True
             return render(request, 'companydata.html', {'ffl':filflag})
