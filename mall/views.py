@@ -1,5 +1,6 @@
 from asyncio.windows_events import NULL
 from urllib import response
+from django import forms
 from django.http import HttpResponse
 from datetime import date
 from django.shortcuts import render, redirect
@@ -7,6 +8,12 @@ from django.contrib import messages
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
 from mall.models import Booking, Companies, Customer, Invoice, Contracts, AdminModel, Services, Shops, Slots
+from django.shortcuts import render
+
+from mall.models import Companies, Customer, Invoice, Contracts
+from .forms import CompanyForm, CompanyContactFrom, CustomerForm, ContractForm, ServicesForm, ProvidesForm
+#import forms
+
 
 # Create your views here.
 
@@ -85,6 +92,7 @@ def invoicedata(request):
     invoices = Invoice.objects.all()
     all_fields = [field.name for field in Invoice._meta.get_fields()]
     del all_fields[0]
+    del all_fields[2:4]
 
     all_fields.insert(4, 'TotalAmount')
     return render(request, 'invoicedata.html', {'invoice': invoices, 'column': all_fields, 'Invoices': Invoice})
@@ -169,3 +177,47 @@ def generateInvoice(request):
     ), Date_paid=date.today(), Contract_id=cid, issued_by_id=12000110, issued_to_id=comp)
     new_inv.save()
     return render(request, 'geninvoice.html')
+
+
+def Companyform(request):
+    if request.method == "POST":
+        com_form = CompanyForm(request.POST)
+        cont_form = CompanyContactFrom(request.POST)
+        if com_form.is_valid():
+            a = com_form.save()
+            b = cont_form.save(commit=False)
+            print("saved")
+            if cont_form.is_valid():
+                b = cont_form.save(commit=False)
+                b.Company = a
+                b.save()
+                cont_form.save_m2m()
+                return redirect('/')
+    else:
+        com_form = CompanyForm()
+        cont_form = CompanyContactFrom()
+    context = {'com_form': com_form, 'cont_form': cont_form, }
+    return render(request, 'companyinput.html', context)
+
+
+def Contractform(request):
+    if request.method == "POST":
+        form1 = ContractForm(request.POST)
+        form2 = ProvidesForm(request.POST)
+        print("saved")
+        if form1.is_valid():
+            a = form1.save()
+            b = form2.save(commit=False)
+            print("saved")
+            if form2.is_valid() and a.Type == "T":
+                b = form2.save(commit=False)
+                b.Contract = a
+                b.save()
+                form2.save_m2m()
+                return redirect('/')
+            return redirect('/')
+    else:
+        form1 = ContractForm()
+        form2 = ProvidesForm()
+    context1 = {'form1': form1, 'form2': form2, }
+    return render(request, 'contractinput.html', context1)

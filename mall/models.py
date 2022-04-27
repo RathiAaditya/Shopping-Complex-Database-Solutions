@@ -21,7 +21,7 @@ class Customer(models.Model):
 class Companies(models.Model):
     Company_id = models.CharField(primary_key=True, max_length=40)
     name = models.CharField(max_length=30)
-    email = models.CharField(max_length=70)
+    email = models.EmailField(max_length=70)
 
     class Meta:
         verbose_name_plural = "Companies"
@@ -32,9 +32,9 @@ class Company_contact_no(models.Model):
         regex='^(\+91[\-\s]?)?[0]?(91)?[789]\d{9}$', message='should be a valid phone number', code='no match')], max_length=12)
 
     Company = models.ForeignKey(
-        Companies, on_delete=models.CASCADE, primary_key=True, default='def')
+        Companies, on_delete=models.CASCADE, default='def')
 
-    class Meta: 
+    class Meta:
         unique_together = (("Contact_no", "Company_id"),)
 
 
@@ -59,14 +59,15 @@ class Company_contact_no(models.Model):
 
 class Contracts(models.Model):
     Type_choices = [
-        ('S', 'Selling'),
-        ('R', 'Renting'),
+        ('S', 'Sell'),
+        ('R', 'Rent'),
+        ('T', 'Service')
     ]
     Contract_id = models.CharField(max_length=40, primary_key=True)
-    Type = models.CharField(max_length=1, choices=Type_choices)
+    Type = models.CharField(max_length=1, choices=Type_choices, default='R')
     Price = models.FloatField()
-    Start_Date = models.DateTimeField()
-    End_Date = models.DateTimeField()
+    Start_Date = models.DateField()
+    End_Date = models.DateField()
 
     Signing_Date = models.DateField()
     Billing_Frequency = models.IntegerField()
@@ -153,7 +154,7 @@ class Services(models.Model):
 
 class Provides(models.Model):
 
-    Contract = models.ForeignKey(
+    Contract = models.OneToOneField(
         Contracts, on_delete=models.CASCADE, primary_key=True, default='def')
     Service = models.ForeignKey(
         Services, on_delete=models.CASCADE, default='def')
@@ -165,7 +166,7 @@ class Provides(models.Model):
 
 class Bound_by(models.Model):
 
-    Contract = models.ForeignKey(
+    Contract = models.OneToOneField(
         Contracts, on_delete=models.CASCADE, primary_key=True, default='def')
     Shop = models.ForeignKey(Shops, on_delete=models.CASCADE, default='def')
 
